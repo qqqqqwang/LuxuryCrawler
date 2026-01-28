@@ -24,7 +24,11 @@ def save_seen_items(seen):
 def job():
     print(f"[{datetime.now()}] Starting scan...")
     seen = load_seen_items()
+    is_first_run = len(seen) == 0
     
+    if is_first_run:
+        print("First run detected. Establishing baseline (no notifications)...")
+
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
         (SecondStreetCrawler(), "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest"),
@@ -48,19 +52,25 @@ def job():
             
             if new_items_batch:
                 print(f"Found {len(new_items_batch)} NEW items on {crawler_name}")
-                # Construct summary message
-                msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
                 
-                # List items (limit to 10 to avoid hitting telegram message length limits if many)
-                for item in new_items_batch[:10]:
-                    msg += f"• {item['title']} ({item['price']})\n"
-                
-                if len(new_items_batch) > 10:
-                    msg += f"...and {len(new_items_batch) - 10} more.\n"
+                # Only send notification if it's NOT the first run
+                if not is_first_run:
+                    # Construct summary message
+                    msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
                     
-                msg += f"\n<a href='{listing_url}'>View All New Items</a>"
-                
-                send_message(msg)
+                    # List items (limit to 10 to avoid hitting telegram message length limits if many)
+                    for item in new_items_batch[:10]:
+                        msg += f"• {item['title']} ({item['price']})\n"
+                    
+                    if len(new_items_batch) > 10:
+                        msg += f"...and {len(new_items_batch) - 10} more.\n"
+                        
+                    msg += f"\n<a href='{listing_url}'>View All New Items</a>"
+                    
+                    send_message(msg)
+                else:
+                    print(f"Skipping notification for {crawler_name} (First Run Baseline)")
+                    
                 new_items_total += len(new_items_batch)
             else:
                 print(f"No new items on {crawler_name}")
