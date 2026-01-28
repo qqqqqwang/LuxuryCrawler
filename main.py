@@ -48,6 +48,11 @@ def job():
             items = crawler.get_new_items()
             print(f"Found {len(items)} items on {crawler_name}")
             
+            # Log crawled items for debugging (User Request)
+            for i, item in enumerate(items):
+                print(f"  [{i+1}] {item['title']} | {item['price']} | ID: {item['id'][-15:]}...")
+            
+            
             new_items_batch = []
             for item in items:
                 if item['id'] not in seen:
