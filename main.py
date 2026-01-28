@@ -3,7 +3,7 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE
+from config import DATA_FILE, EXCLUDED_KEYWORDS
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from notifier import send_message
@@ -56,7 +56,18 @@ def job():
             new_items_batch = []
             for item in items:
                 if item['id'] not in seen:
-                    new_items_batch.append(item)
+                    # Check for excluded keywords (Brand Filter)
+                    is_excluded = False
+                    for keyword in EXCLUDED_KEYWORDS:
+                        if keyword.lower() in item['title'].lower():
+                            print(f"  -> Filtered out: {item['title']} (Matched '{keyword}')")
+                            is_excluded = True
+                            break
+                    
+                    if not is_excluded:
+                        new_items_batch.append(item)
+                    
+                    # Mark as seen regardless to avoid re-processing
                     seen.add(item['id'])
             
             if new_items_batch:
