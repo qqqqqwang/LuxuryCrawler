@@ -31,16 +31,20 @@ def job():
 
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
-        (SecondStreetCrawler(), "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest"),
-        (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products")
+        (SecondStreetCrawler(), "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest", "2ndstreet"),
+        (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill")
     ]
     
     new_items_total = 0
     
-    for crawler, listing_url in crawlers_config:
+    for crawler, listing_url, url_keyword in crawlers_config:
         crawler_name = type(crawler).__name__.replace("Crawler", "")
+        
+        # Check if we have history for this specific source
+        has_history = any(url_keyword in item_id for item_id in seen)
+        
         try:
-            print(f"Running {crawler_name}...")
+            print(f"Running {crawler_name} (History: {has_history})...")
             items = crawler.get_new_items()
             print(f"Found {len(items)} items on {crawler_name}")
             
@@ -53,12 +57,17 @@ def job():
             if new_items_batch:
                 print(f"Found {len(new_items_batch)} NEW items on {crawler_name}")
                 
-                # Only send notification if it's NOT the first run
-                if not is_first_run:
-                    # Construct summary message
+                # Notification Logic:
+                # 1. If global seen is completely empty -> First Run (Baseline)
+                # 2. If this specific source has NO history -> New Source (Baseline)
+                if len(seen) - len(new_items_batch) == 0: # Was empty before this batch
+                     print(f"Skipping notification for {crawler_name} (Global First Run)")
+                elif not has_history:
+                     print(f"Skipping notification for {crawler_name} (New Source Baseline)")
+                else:
+                    # Not first run, and has history -> Genuine new items
                     msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
                     
-                    # List items (limit to 10 to avoid hitting telegram message length limits if many)
                     for item in new_items_batch[:10]:
                         msg += f"• {item['title']} ({item['price']})\n"
                     
@@ -68,8 +77,6 @@ def job():
                     msg += f"\n<a href='{listing_url}'>View All New Items</a>"
                     
                     send_message(msg)
-                else:
-                    print(f"Skipping notification for {crawler_name} (First Run Baseline)")
                     
                 new_items_total += len(new_items_batch)
             else:
