@@ -2,7 +2,7 @@ name: Luxury Crawler
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Run every 15 minutes
+    - cron: '7,22,37,52 * * * *'  # Run at minute 7, 22, 37, 52 to avoid peak-hour queue
   workflow_dispatch:        # Allow manual trigger
 
 jobs:
