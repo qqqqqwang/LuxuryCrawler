@@ -13,5 +13,8 @@ CHECK_INTERVAL_MINUTES = 15
 URL_2NDSTREET = "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest"
 URL_POPCHILL = "https://www.popchill.com/zh-TW/new_products"
 
+# Filter Config
+EXCLUDED_KEYWORDS = ["Coach", "Tory Burch"]
+
 # Persistence
 DATA_FILE = "seen_items.json"
