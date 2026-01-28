@@ -2,7 +2,8 @@ import os
 
 # Telegram Config
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+# Support multiple chat IDs separated by comma
+TELEGRAM_CHAT_IDS = os.getenv("TELEGRAM_CHAT_ID", "").split(",")
 
 # Crawler Config
 # This is now controlled by GitHub Actions schedule, but we keep a fallback or unused const
