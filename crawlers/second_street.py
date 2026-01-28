@@ -8,7 +8,13 @@ class SecondStreetCrawler(Crawler):
         try:
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=True)
-                page = browser.new_page()
+                # Force Taiwan locale to ensure TWD currency
+                context = browser.new_context(
+                    locale="zh-TW",
+                    timezone_id="Asia/Taipei",
+                    user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                )
+                page = context.new_page()
                 page.goto(url)
                 try:
                     page.wait_for_selector(".product-card__vertical", timeout=30000)

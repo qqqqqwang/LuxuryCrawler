@@ -1,19 +1,50 @@
 from .base import Crawler
 from playwright.sync_api import sync_playwright
+import time
+from fake_useragent import UserAgent
 
 class PopChillCrawler(Crawler):
     def get_new_items(self):
         url = "https://www.popchill.com/zh-TW/new_products"
         items = []
         try:
+            ua = UserAgent()
+            user_agent = ua.random
+            
             with sync_playwright() as p:
-                browser = p.chromium.launch(headless=True)
-                page = browser.new_page()
-                page.goto(url)
+                # Launch with args to hide automation
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=[
+                        '--disable-blink-features=AutomationControlled',
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox'
+                    ]
+                )
+                context = browser.new_context(
+                    user_agent=user_agent,
+                    viewport={'width': 1920, 'height': 1080},
+                    locale="zh-TW",
+                    timezone_id="Asia/Taipei"
+                )
+                
+                # Add stealth script
+                context.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined
+                    });
+                """)
+                
+                page = context.new_page()
+                print(f"DEBUG: Navigating to {url} with UA {user_agent}...")
+                page.goto(url, wait_until="networkidle") # Wait for network to settle
+                
+                # Wait longer and try to identify why it fails
                 try:
-                    page.wait_for_selector('a[href^="/zh-TW/product/"]', timeout=30000)
-                except:
-                    print("Timeout waiting for PopChill products")
+                    page.wait_for_selector('a[href^="/zh-TW/product/"]', timeout=45000)
+                except Exception as e:
+                    print(f"DEBUG: Timeout on PopChill. Content preview: {page.content()[:500]}")
+                    page.screenshot(path="popchill_debug.png")
                     browser.close()
                     return []
                     
