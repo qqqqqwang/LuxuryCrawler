@@ -23,7 +23,6 @@ def save_seen_items(seen):
 
 def job():
     print(f"[{datetime.now()}] Starting scan...")
-    print("--- VERSION: 2026-01-29 SINGLE LINE + LINKS ---")
     seen = load_seen_items()
     is_first_run = len(seen) == 0
     
