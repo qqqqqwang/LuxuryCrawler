@@ -49,7 +49,7 @@ class PopChillCrawler(Crawler):
                     return []
                     
                 cards = page.query_selector_all('a[href^="/zh-TW/product/"]')
-                for card in cards[:20]:
+                for card in cards[:50]:
                     try:
                         title_el = card.query_selector('div.line-clamp-2')
                         price_el = card.query_selector('div.font-bold')

@@ -24,7 +24,7 @@ class SecondStreetCrawler(Crawler):
                     return []
                 
                 cards = page.query_selector_all(".product-card__vertical")
-                for card in cards[:20]: # Check top 20 to be safe
+                for card in cards[:50]: # Check top 50 to be safe
                     try:
                         title_el = card.query_selector('[data-qe-id="body-meta-field-text"]')
                         price_el = card.query_selector('[data-qe-id="body-price-text"]')
