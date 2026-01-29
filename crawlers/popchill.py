@@ -47,6 +47,11 @@ class PopChillCrawler(Crawler):
                     page.screenshot(path="popchill_debug.png")
                     browser.close()
                     return []
+                
+                # Scroll down to load more items (Lazy Loading)
+                for _ in range(3): 
+                    page.mouse.wheel(0, 3000)
+                    page.wait_for_timeout(1500)
                     
                 cards = page.query_selector_all('a[href^="/zh-TW/product/"]')
                 for card in cards[:50]:
