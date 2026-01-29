@@ -3,7 +3,7 @@ from playwright.sync_api import sync_playwright
 
 class SecondStreetCrawler(Crawler):
     def get_new_items(self):
-        url = "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest"
+        url = "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest&lang=zh-TW&currency=TWD"
         items = []
         try:
             with sync_playwright() as p:
