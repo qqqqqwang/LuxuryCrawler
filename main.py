@@ -85,7 +85,9 @@ def job():
                     msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
                     
                     for item in new_items_batch[:10]:
-                        msg += f"• {item['title']} ({item['price']})\n"
+                        # Clean price string (remove overlapping currencies if needed, but keeping simple for now)
+                        price_display = item['price'].replace("NT$", "").replace("TWD", "").replace("$", "").strip()
+                        msg += f"• {item['title']}\n【TWD {price_display}】\n\n"
                     
                     if len(new_items_batch) > 10:
                         msg += f"...and {len(new_items_batch) - 10} more.\n"
