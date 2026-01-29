@@ -23,9 +23,9 @@ class PopChillCrawler(Crawler):
                 )
                 context = browser.new_context(
                     user_agent=user_agent,
-                    viewport={'width': 1920, 'height': 1080},
                     locale="zh-TW",
-                    timezone_id="Asia/Taipei"
+                    timezone_id="Asia/Taipei",
+                    viewport={'width': 1920, 'height': 1080}
                 )
                 
                 # Add stealth script
