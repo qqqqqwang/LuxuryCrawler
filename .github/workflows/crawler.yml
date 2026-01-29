@@ -1,9 +1,9 @@
 name: Luxury Crawler
 
 on:
-  schedule:
-    - cron: '7,22,37,52 * * * *'  # Run at minute 7, 22, 37, 52 to avoid peak-hour queue
   workflow_dispatch:        # Allow manual trigger
+  repository_dispatch:      # Allow external API trigger
+    types: [trigger-crawl]
 
 jobs:
   crawl:
