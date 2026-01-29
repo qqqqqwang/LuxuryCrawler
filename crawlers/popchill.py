@@ -8,8 +8,8 @@ class PopChillCrawler(Crawler):
         url = "https://www.popchill.com/zh-TW/new_products"
         items = []
         try:
-            ua = UserAgent()
-            user_agent = ua.random
+            # User reports Desktop Web is fresher, so we fix UA to Desktop Chrome
+            user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             
             with sync_playwright() as p:
                 # Launch with args to hide automation
