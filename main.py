@@ -87,7 +87,7 @@ def job():
                     for item in new_items_batch[:10]:
                         # Clean price string (remove overlapping currencies if needed, but keeping simple for now)
                         price_display = item['price'].replace("NT$", "").replace("TWD", "").replace("$", "").strip()
-                        msg += f"• {item['title']} 【TWD {price_display}】\n\n"
+                        msg += f"• <a href='{item['link']}'>{item['title']}</a> 【TWD {price_display}】\n\n"
                     
                     if len(new_items_batch) > 10:
                         msg += f"...and {len(new_items_batch) - 10} more.\n"
