@@ -1,7 +1,7 @@
 from .base import Crawler
 from playwright.sync_api import sync_playwright
 import time
-from fake_useragent import UserAgent
+
 
 class PopChillCrawler(Crawler):
     def get_new_items(self):
@@ -48,33 +48,38 @@ class PopChillCrawler(Crawler):
                     browser.close()
                     return []
                 
-                # Scroll down to load more items (Lazy Loading)
-                for _ in range(3): 
-                    page.mouse.wheel(0, 3000)
-                    page.wait_for_timeout(1500)
+                # Scroll once to ensure we have enough items (Initial load is 100, scroll makes it 200)
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(1500)
+                
+                # Extract items
+                products = []
+                try:
+                    # Select product cards
+                    cards = page.query_selector_all('a[href^="/zh-TW/product/"]')
+                    print(f"[PopChill] Found {len(cards)} items in DOM. Scanning top 100...")
                     
-                cards = page.query_selector_all('a[href^="/zh-TW/product/"]')
-                for card in cards[:50]:
-                    try:
-                        title_el = card.query_selector('div.line-clamp-2')
-                        price_el = card.query_selector('div.font-bold')
-                        link = card.get_attribute("href")
-                        
-                        if title_el and price_el and link:
-                            title = title_el.inner_text()
-                            price = price_el.inner_text()
-                            if not link.startswith("http"):
-                                link = "https://www.popchill.com" + link
-                                
-                            items.append({
-                                "id": link,
-                                "title": title,
-                                "price": price,
-                                "link": link,
-                                "source": "PopChill"
-                            })
-                    except:
-                        pass
+                    for card in cards[:100]:
+                        try:
+                            title_el = card.query_selector('div.line-clamp-2')
+                            price_el = card.query_selector('div.font-bold')
+                            link = card.get_attribute("href")
+                            
+                            if title_el and price_el and link:
+                                title = title_el.inner_text()
+                                price = price_el.inner_text()
+                                if not link.startswith("http"):
+                                    link = "https://www.popchill.com" + link
+                                    
+                                items.append({
+                                    "id": link,
+                                    "title": title,
+                                    "price": price,
+                                    "link": link,
+                                    "source": "PopChill"
+                                })
+                        except:
+                            pass
                 browser.close()
         except Exception as e:
             print(f"Error in PopChillCrawler: {e}")

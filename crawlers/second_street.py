@@ -1,9 +1,10 @@
 from .base import Crawler
 from playwright.sync_api import sync_playwright
+from config import SECOND_STREET_CATEGORY_ID
 
 class SecondStreetCrawler(Crawler):
     def get_new_items(self):
-        url = "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest&lang=zh-TW&currency=TWD"
+        url = f"https://store.2ndstreet.com.tw/v2/official/SalePageCategory/{SECOND_STREET_CATEGORY_ID}?sortMode=Newest&lang=zh-TW&currency=TWD"
         items = []
         try:
             with sync_playwright() as p:
@@ -24,7 +25,7 @@ class SecondStreetCrawler(Crawler):
                     return []
                 
                 cards = page.query_selector_all(".product-card__vertical")
-                for card in cards[:50]: # Check top 50 to be safe
+                for card in cards[:200]: # Check top 200 (page loads 200 by default)
                     try:
                         title_el = card.query_selector('[data-qe-id="body-meta-field-text"]')
                         price_el = card.query_selector('[data-qe-id="body-price-text"]')

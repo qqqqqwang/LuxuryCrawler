@@ -16,5 +16,17 @@ URL_POPCHILL = "https://www.popchill.com/zh-TW/new_products"
 # Filter Config
 EXCLUDED_KEYWORDS = ["Coach", "Tory Burch"]
 
+# 2nd Street Config
+SECOND_STREET_CATEGORY_ID = "442462"
+
+# Luxury Brand Whitelist (2nd Street Only)
+LUXURY_BRANDS = [
+    "Hermes", "Chanel", "Louis Vuitton", "Dior", "Gucci", "Celine", 
+    "Fendi", "Prada", "Bottega Veneta", "Saint Laurent", "Loewe", 
+    "Goyard", "Balenciaga", "Miu Miu", "Burberry", "Valentino", "Delvaux",
+    "Cartier", "Salvatore Ferragamo", "Ferragamo", "Bvlgari", "Tiffany", 
+    "Van Cleef & Arpels", "Rolex", "Moynat", "Valextra", "Chloe"
+]
+
 # Persistence
 DATA_FILE = "seen_items.json"

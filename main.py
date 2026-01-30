@@ -3,7 +3,7 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS
+from config import DATA_FILE, EXCLUDED_KEYWORDS, LUXURY_BRANDS, SECOND_STREET_CATEGORY_ID
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from notifier import send_message
@@ -31,7 +31,7 @@ def job():
 
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
-        (SecondStreetCrawler(), "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest", "2ndstreet"),
+        (SecondStreetCrawler(), f"https://store.2ndstreet.com.tw/v2/official/SalePageCategory/{SECOND_STREET_CATEGORY_ID}?sortMode=Newest", "2ndstreet"),
         (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill")
     ]
     
@@ -63,6 +63,17 @@ def job():
                             print(f"  -> Filtered out: {item['title']} (Matched '{keyword}')")
                             is_excluded = True
                             break
+                    
+                    # check whitelist for 2nd Street
+                    if not is_excluded and crawler_name == "SecondStreet":
+                        is_luxury = False
+                        for brand in LUXURY_BRANDS:
+                            if brand.lower() in item['title'].lower():
+                                is_luxury = True
+                                break
+                        if not is_luxury:
+                             print(f"  -> Filtered out: {item['title']} (Not in Luxury Whitelist)")
+                             is_excluded = True
                     
                     if not is_excluded:
                         new_items_batch.append(item)
