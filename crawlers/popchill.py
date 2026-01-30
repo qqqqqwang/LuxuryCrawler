@@ -80,6 +80,9 @@ class PopChillCrawler(Crawler):
                                 })
                         except:
                             pass
+                except Exception as e:
+                    print(f"Error parsing PopChill items: {e}")
+                
                 browser.close()
         except Exception as e:
             print(f"Error in PopChillCrawler: {e}")
