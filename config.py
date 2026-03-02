@@ -16,17 +16,19 @@ URL_POPCHILL = "https://www.popchill.com/zh-TW/new_products"
 # Filter Config
 EXCLUDED_KEYWORDS = ["Coach", "Tory Burch"]
 
-# 2nd Street Config
-SECOND_STREET_CATEGORY_ID = "442462"
-
-# Luxury Brand Whitelist (2nd Street Only)
-LUXURY_BRANDS = [
-    "Hermes", "Chanel", "Louis Vuitton", "Dior", "Gucci", "Celine", 
-    "Fendi", "Prada", "Bottega Veneta", "Saint Laurent", "Loewe", 
-    "Goyard", "Balenciaga", "Miu Miu", "Burberry", "Valentino", "Delvaux",
-    "Cartier", "Salvatore Ferragamo", "Ferragamo", "Bvlgari", "Tiffany", 
-    "Van Cleef & Arpels", "Rolex", "Moynat", "Valextra", "Chloe"
-]
+# 2nd Street Brand Search URLs
+SECOND_STREET_BRANDS = {
+    "LV": "https://store.2ndstreet.com.tw/v2/Search?q=LOUIS+VUITTON&shopId=41320&order=Newest",
+    "CHANEL": "https://store.2ndstreet.com.tw/v2/Search?q=CHANEL&shopId=41320&order=Newest",
+    "HERMES": "https://store.2ndstreet.com.tw/v2/Search?q=HERMES&shopId=41320&startIndex=0&order=Newest",
+    "CELINE": "https://store.2ndstreet.com.tw/v2/Search?q=CELINE&shopId=41320&order=Newest",
+    "BURBERRY": "https://store.2ndstreet.com.tw/v2/Search?q=BURBERRY&shopId=41320&order=Newest",
+    "BALENCIAGA": "https://store.2ndstreet.com.tw/v2/Search?q=BALENCIAGA&shopId=41320&order=Newest",
+    "GUCCI": "https://store.2ndstreet.com.tw/v2/Search?q=GUCCI&shopId=41320&order=Newest",
+    "MIU MIU": 'https://store.2ndstreet.com.tw/v2/Search?q=%22MIU+MIU%22&shopId=41320&order=Newest',
+    "PRADA": 'https://store.2ndstreet.com.tw/v2/Search?q=%22PRADA%22&shopId=41320&order=Newest',
+    "DIOR": 'https://store.2ndstreet.com.tw/v2/Search?q=%22DIOR%22&shopId=41320&order=Newest'
+}
 
 # Persistence
 DATA_FILE = "seen_items.json"

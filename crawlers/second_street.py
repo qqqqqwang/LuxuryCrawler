@@ -1,10 +1,9 @@
 from .base import Crawler
 from playwright.sync_api import sync_playwright
-from config import SECOND_STREET_CATEGORY_ID
+from config import SECOND_STREET_BRANDS
 
 class SecondStreetCrawler(Crawler):
     def get_new_items(self):
-        url = f"https://store.2ndstreet.com.tw/v2/official/SalePageCategory/{SECOND_STREET_CATEGORY_ID}?sortMode=Newest&lang=zh-TW&currency=TWD"
         items = []
         try:
             with sync_playwright() as p:
@@ -31,36 +30,43 @@ class SecondStreetCrawler(Crawler):
                     });
                 """)
                 page = context.new_page()
-                page.goto(url)
-                try:
-                    page.wait_for_selector(".product-card__vertical", timeout=30000)
-                except:
-                    print("Timeout waiting for 2ndStreet products")
-                    browser.close()
-                    return []
                 
-                cards = page.query_selector_all(".product-card__vertical")
-                for card in cards[:200]: # Check top 200 (page loads 200 by default)
+                for brand_name, url in SECOND_STREET_BRANDS.items():
+                    print(f"Crawling 2ndStreet {brand_name}...")
                     try:
-                        title_el = card.query_selector('[data-qe-id="body-meta-field-text"]')
-                        price_el = card.query_selector('[data-qe-id="body-price-text"]')
-                        link = card.get_attribute("href")
+                        page.goto(url)
+                        try:
+                            page.wait_for_selector(".product-card__vertical", timeout=15000)
+                        except:
+                            print(f"No items or timeout for 2ndStreet {brand_name}")
+                            continue
                         
-                        if title_el and price_el and link:
-                            title = title_el.inner_text()
-                            price = price_el.inner_text()
-                            if not link.startswith("http"):
-                                link = "https://store.2ndstreet.com.tw" + link
-                            
-                            items.append({
-                                "id": link,
-                                "title": title,
-                                "price": price,
-                                "link": link,
-                                "source": "2ndStreet"
-                            })
+                        cards = page.query_selector_all(".product-card__vertical")
+                        for card in cards[:100]: # Top 100 new items per brand
+                            try:
+                                title_el = card.query_selector('[data-qe-id="body-meta-field-text"]')
+                                price_el = card.query_selector('[data-qe-id="body-price-text"]')
+                                link = card.get_attribute("href")
+                                
+                                if title_el and price_el and link:
+                                    title = title_el.inner_text()
+                                    price = price_el.inner_text()
+                                    if not link.startswith("http"):
+                                        link = "https://store.2ndstreet.com.tw" + link
+                                    
+                                    items.append({
+                                        "id": link,
+                                        "title": title,
+                                        "price": price,
+                                        "link": link,
+                                        "source": "2ndStreet",
+                                        "brand": brand_name
+                                    })
+                            except Exception as e:
+                                print(f"Error parsing 2ndStreet card: {e}")
                     except Exception as e:
-                        print(f"Error parsing 2ndStreet card: {e}")
+                        print(f"Error iterating {brand_name}: {e}")
+                
                 browser.close()
         except Exception as e:
             print(f"Error in SecondStreetCrawler: {e}")

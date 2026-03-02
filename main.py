@@ -3,7 +3,7 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, LUXURY_BRANDS, SECOND_STREET_CATEGORY_ID
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from notifier import send_message
@@ -31,7 +31,7 @@ def job():
 
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
-        (SecondStreetCrawler(), f"https://store.2ndstreet.com.tw/v2/official/SalePageCategory/{SECOND_STREET_CATEGORY_ID}?sortMode=Newest", "2ndstreet"),
+        (SecondStreetCrawler(), None, "2ndstreet"),
         (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill")
     ]
     
@@ -64,17 +64,6 @@ def job():
                             is_excluded = True
                             break
                     
-                    # check whitelist for 2nd Street
-                    if not is_excluded and crawler_name == "SecondStreet":
-                        is_luxury = False
-                        for brand in LUXURY_BRANDS:
-                            if brand.lower() in item['title'].lower():
-                                is_luxury = True
-                                break
-                        if not is_luxury:
-                             print(f"  -> Filtered out: {item['title']} (Not in Luxury Whitelist)")
-                             is_excluded = True
-                    
                     if not is_excluded:
                         new_items_batch.append(item)
                     
@@ -86,26 +75,49 @@ def job():
                 
                 # Notification Logic:
                 # 1. If global seen is completely empty -> First Run (Baseline)
-                # 2. If this specific source has NO history -> New Source (Baseline)
-                if len(seen) - len(new_items_batch) == 0: # Was empty before this batch
+                if len(seen) - len(new_items_batch) == 0:
                      print(f"Skipping notification for {crawler_name} (Global First Run)")
-                elif not has_history:
-                     print(f"Skipping notification for {crawler_name} (New Source Baseline)")
-                else:
-                    # Not first run, and has history -> Genuine new items
-                    msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
-                    
-                    for item in new_items_batch[:10]:
-                        # Clean price string (remove overlapping currencies if needed, but keeping simple for now)
-                        price_display = item['price'].replace("NT$", "").replace("TWD", "").replace("$", "").strip()
-                        msg += f"• {item['title']} 【TWD {price_display}】 👉 <a href='{item['link']}'>前往商品</a>\n\n"
-                    
-                    if len(new_items_batch) > 10:
-                        msg += f"...and {len(new_items_batch) - 10} more.\n"
+                
+                # Special handling for 2ndStreet (Brand-specific notifications)
+                elif crawler_name == "SecondStreet":
+                    # Group by brand
+                    brand_items = {}
+                    for item in new_items_batch:
+                        brand = item.get("brand", "Unknown")
+                        if brand not in brand_items:
+                            brand_items[brand] = []
+                        brand_items[brand].append(item)
                         
-                    msg += f"\n<a href='{listing_url}'>View All New Items</a>"
-                    
-                    send_message(msg)
+                    for brand, items in brand_items.items():
+                        # Assume history exists if the general 2ndstreet keyword exists in history
+                        # To prevent massive spam on new brands
+                        if not has_history:
+                            print(f"Skipping notification for 2ndStreet {brand} (New Source Baseline)")
+                            continue
+                            
+                        # Format the brand specific message
+                        brand_url = SECOND_STREET_BRANDS.get(brand, "")
+                        msg = f"<b>{brand} 有新品上架了！</b>\n\n"
+                        msg += f"👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>"
+                        send_message(msg)
+                
+                # Handling for PopChill (General notifications)
+                else:
+                    if not has_history:
+                         print(f"Skipping notification for {crawler_name} (New Source Baseline)")
+                    else:
+                        msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
+                        
+                        for item in new_items_batch[:10]:
+                            price_display = item['price'].replace("NT$", "").replace("TWD", "").replace("$", "").strip()
+                            msg += f"• {item['title']} 【TWD {price_display}】 👉 <a href='{item['link']}'>前往商品</a>\n\n"
+                        
+                        if len(new_items_batch) > 10:
+                            msg += f"...and {len(new_items_batch) - 10} more.\n"
+                            
+                        msg += f"\n<a href='{listing_url}'>View All New Items</a>"
+                        
+                        send_message(msg)
                     
                 new_items_total += len(new_items_batch)
             else:
