@@ -97,7 +97,7 @@ def job():
                             
                         # Format the brand specific message
                         brand_url = SECOND_STREET_BRANDS.get(brand, "")
-                        msg = f"<b>{brand} 有新品上架了！</b>\n\n"
+                        msg = f"<b>2nd street {brand} 有新品上架了！</b>\n\n"
                         msg += f"👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>"
                         send_message(msg)
                 
