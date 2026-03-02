@@ -8,13 +8,28 @@ class SecondStreetCrawler(Crawler):
         items = []
         try:
             with sync_playwright() as p:
-                browser = p.chromium.launch(headless=True)
+                # Add stealth and sandbox arguments for Linux environments
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=[
+                        '--disable-blink-features=AutomationControlled',
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox'
+                    ]
+                )
                 # Force Taiwan locale to ensure TWD currency
                 context = browser.new_context(
                     locale="zh-TW",
                     timezone_id="Asia/Taipei",
                     user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
                 )
+                
+                # Add stealth script
+                context.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined
+                    });
+                """)
                 page = context.new_page()
                 page.goto(url)
                 try:
