@@ -30,5 +30,11 @@ SECOND_STREET_BRANDS = {
     "DIOR": 'https://store.2ndstreet.com.tw/v2/Search?q=%22DIOR%22&shopId=41320&order=Newest'
 }
 
+# Hermes URLs
+HERMES_URLS = {
+    "包款 (Bags)": "https://www.hermes.com/tw/zh/category/leather-goods/bags-and-clutches/#|",
+    "皮件 (Small Leather Goods)": "https://www.hermes.com/tw/zh/category/leather-goods/small-leather-goods/#|"
+}
+
 # Persistence
 DATA_FILE = "seen_items.json"

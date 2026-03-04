@@ -6,6 +6,7 @@ from datetime import datetime
 from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
+from crawlers.hermes import HermesCrawler
 from notifier import send_message
 
 def load_seen_items():
@@ -32,7 +33,8 @@ def job():
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
         (SecondStreetCrawler(), None, "2ndstreet"),
-        (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill")
+        (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill"),
+        (HermesCrawler(), None, "hermes")
     ]
     
     new_items_total = 0
@@ -99,6 +101,31 @@ def job():
                         brand_url = SECOND_STREET_BRANDS.get(brand, "")
                         msg = f"<b>2nd street {brand} 有新品上架了！</b>\n\n"
                         msg += f"👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>"
+                        send_message(msg)
+                
+                # Handling for Hermes (Category-specific notifications)
+                elif crawler_name == "Hermes":
+                    # Group by category (Bags vs Small Leather Goods)
+                    category_items = {}
+                    for item in new_items_batch:
+                        cat = item.get("category", "Unknown")
+                        if cat not in category_items:
+                            category_items[cat] = []
+                        category_items[cat].append(item)
+                        
+                    for cat, items in category_items.items():
+                        if not has_history:
+                            print(f"Skipping notification for Hermes {cat} (New Source Baseline)")
+                            continue
+                            
+                        msg = f"<b>Hermes 愛馬仕 {cat} 官網有新品上架了！({len(items)}件)</b>\n\n"
+                        
+                        for item in items[:10]:
+                            msg += f"• {item['title']} 👉 <a href='{item['link']}'>前往商品</a>\n\n"
+                            
+                        if len(items) > 10:
+                            msg += f"...and {len(items) - 10} more.\n"
+                    
                         send_message(msg)
                 
                 # Handling for PopChill (General notifications)
