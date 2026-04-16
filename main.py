@@ -3,12 +3,13 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from crawlers.hermes import HermesCrawler
 from crawlers.area02 import Area02Crawler
 from crawlers.okura import OkuraCrawler
+from crawlers.ecoring import EcoRingCrawler
 from notifier import send_message
 
 def load_seen_items():
@@ -38,7 +39,8 @@ def job():
         (PopChillCrawler(), URL_POPCHILL, "popchill"),
         (HermesCrawler(), None, "hermes"),
         (Area02Crawler(), URL_AREA02, "area02"),
-        (OkuraCrawler(), URL_OKURA, "okura")
+        (OkuraCrawler(), URL_OKURA, "okura"),
+        (EcoRingCrawler(), URL_ECORING, "ecoring")
     ]
     
     new_items_total = 0
@@ -144,6 +146,8 @@ def job():
                             display_name = "Area02"
                         elif crawler_name == "okura":
                             display_name = "OKURA"
+                        elif crawler_name == "ecoring":
+                            display_name = "EcoRing"
                             
                         msg = f"<b>{display_name} 新品上架：{len(new_items_batch)} 商品</b>\n\n"
                         
