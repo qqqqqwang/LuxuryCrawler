@@ -137,7 +137,15 @@ def job():
                     if not has_history:
                          print(f"Skipping notification for {crawler_name} (New Source Baseline)")
                     else:
-                        msg = f"<b>{len(new_items_batch)} New Items on {crawler_name}!</b>\n\n"
+                        display_name = crawler_name
+                        if crawler_name == "popchill":
+                            display_name = "拍拍圈"
+                        elif crawler_name == "area02":
+                            display_name = "Area02"
+                        elif crawler_name == "okura":
+                            display_name = "OKURA"
+                            
+                        msg = f"<b>{display_name} 新品上架：{len(new_items_batch)} 商品</b>\n\n"
                         
                         for item in new_items_batch[:10]:
                             price_display = item['price'].replace("NT$", "").replace("TWD", "").replace("$", "").strip()
