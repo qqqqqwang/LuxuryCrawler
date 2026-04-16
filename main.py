@@ -82,26 +82,25 @@ def job():
                 
                 # Special handling for 2ndStreet (Brand-specific notifications)
                 elif crawler_name == "SecondStreet":
-                    # Group by brand
-                    brand_items = {}
-                    for item in new_items_batch:
-                        brand = item.get("brand", "Unknown")
-                        if brand not in brand_items:
-                            brand_items[brand] = []
-                        brand_items[brand].append(item)
-                        
-                    for brand, items in brand_items.items():
-                        # Assume history exists if the general 2ndstreet keyword exists in history
-                        # To prevent massive spam on new brands
-                        if not has_history:
-                            print(f"Skipping notification for 2ndStreet {brand} (New Source Baseline)")
-                            continue
+                    if not has_history:
+                        print("Skipping notification for 2ndStreet (New Source Baseline)")
+                    else:
+                        # Group by brand
+                        brand_items = {}
+                        for item in new_items_batch:
+                            brand = item.get("brand", "Unknown")
+                            if brand not in brand_items:
+                                brand_items[brand] = []
+                            brand_items[brand].append(item)
                             
-                        # Format the brand specific message
-                        brand_url = SECOND_STREET_BRANDS.get(brand, "")
-                        msg = f"<b>2nd street {brand} 有新品上架了！</b>\n\n"
-                        msg += f"👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>"
-                        send_message(msg)
+                        if brand_items:
+                            msg = "<b>2nd street 有新品上架了！</b>\n\n"
+                            for brand, items in brand_items.items():
+                                brand_url = SECOND_STREET_BRANDS.get(brand, "")
+                                msg += f"✨ <b>{brand}</b> ({len(items)}件)\n"
+                                msg += f"👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>\n\n"
+                                
+                            send_message(msg.strip())
                 
                 # Handling for Hermes (Category-specific notifications)
                 elif crawler_name == "Hermes":
