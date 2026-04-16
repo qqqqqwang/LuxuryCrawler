@@ -3,10 +3,11 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_AREA02
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from crawlers.hermes import HermesCrawler
+from crawlers.area02 import Area02Crawler
 from notifier import send_message
 
 def load_seen_items():
@@ -34,7 +35,8 @@ def job():
     crawlers_config = [
         (SecondStreetCrawler(), None, "2ndstreet"),
         (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill"),
-        (HermesCrawler(), None, "hermes")
+        (HermesCrawler(), None, "hermes"),
+        (Area02Crawler(), URL_AREA02, "area02")
     ]
     
     new_items_total = 0
