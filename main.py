@@ -3,11 +3,12 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_AREA02
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_AREA02, URL_OKURA
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from crawlers.hermes import HermesCrawler
 from crawlers.area02 import Area02Crawler
+from crawlers.okura import OkuraCrawler
 from notifier import send_message
 
 def load_seen_items():
@@ -34,9 +35,10 @@ def job():
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
         (SecondStreetCrawler(), None, "2ndstreet"),
-        (PopChillCrawler(), "https://www.popchill.com/zh-TW/new_products", "popchill"),
+        (PopChillCrawler(), URL_POPCHILL, "popchill"),
         (HermesCrawler(), None, "hermes"),
-        (Area02Crawler(), URL_AREA02, "area02")
+        (Area02Crawler(), URL_AREA02, "area02"),
+        (OkuraCrawler(), URL_OKURA, "okura")
     ]
     
     new_items_total = 0
