@@ -99,7 +99,7 @@ def job():
                             msg += "─────\n"
                             for brand, items in brand_items.items():
                                 brand_url = SECOND_STREET_BRANDS.get(brand, "")
-                                msg += f"✨ <b>{brand}</b> ({len(items)}件) 👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>\n"
+                                msg += f"✨ <b>{brand}</b> ({len(items)}件) 👉 <a href='{brand_url}'>查看頁面</a>\n\n"
                                 
                             send_message(msg.strip())
                 
