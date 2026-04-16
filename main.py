@@ -3,7 +3,7 @@ import json
 import os
 import sys
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_AREA02, URL_OKURA
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from crawlers.hermes import HermesCrawler
