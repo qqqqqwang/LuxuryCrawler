@@ -94,11 +94,12 @@ def job():
                             brand_items[brand].append(item)
                             
                         if brand_items:
-                            msg = "<b>2nd street 有新品上架了！</b>\n\n"
+                            brands_list = ", ".join(brand_items.keys())
+                            msg = f"<b>2nd street 新品上架：{brands_list}</b>\n"
+                            msg += "─────\n"
                             for brand, items in brand_items.items():
                                 brand_url = SECOND_STREET_BRANDS.get(brand, "")
-                                msg += f"✨ <b>{brand}</b> ({len(items)}件)\n"
-                                msg += f"👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>\n\n"
+                                msg += f"✨ <b>{brand}</b> ({len(items)}件) 👉 <a href='{brand_url}'>查看 {brand} 專屬頁面</a>\n"
                                 
                             send_message(msg.strip())
                 
