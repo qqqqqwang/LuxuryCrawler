@@ -69,7 +69,8 @@ def notify_sweet_spot(item, is_high_confidence, target_info):
         f"{title}",
         f"<b>商品：</b><a href='{item.get('link', '')}'>{item.get('title', '無標題')}</a>",
         f"<b>品牌：</b>{target_info.get('品牌', item.get('brand', '未知'))}",
-        f"<b>售價：</b>${display_price:,} (目標價: ${target_price:,})"
+        f"<b>售價：</b>${display_price:,} (目標價: ${target_price:,})",
+        f"<b>平台：</b>{item.get('source', '未知')}"
     ]
     
     missing_info = target_info.get('missing_info', [])
