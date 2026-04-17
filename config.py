@@ -4,6 +4,10 @@ import os
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 # Support multiple chat IDs separated by comma
 TELEGRAM_CHAT_IDS = os.getenv("TELEGRAM_CHAT_ID", "").split(",")
+SWEET_SPOT_TG_CHAT_ID = os.getenv("SWEET_SPOT_TG_CHAT_ID", "-5234775671")
+
+# Sweet Spot Target List
+TARGET_LIST_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI1lVm7yebr_c2YFVYaCrcorVfj9vg5pXjcK4Bxw6PsSWJCXXaLdE4Me9m__6PDCEOo3OGScSMSKp6/pub?output=csv"
 
 # Crawler Config
 # This is now controlled by GitHub Actions schedule, but we keep a fallback or unused const

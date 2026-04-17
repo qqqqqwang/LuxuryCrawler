@@ -2,15 +2,24 @@ import time
 import json
 import os
 import sys
+import logging
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, TARGET_LIST_URL
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from crawlers.hermes import HermesCrawler
 from crawlers.area02 import Area02Crawler
 from crawlers.okura import OkuraCrawler
 from crawlers.ecoring import EcoRingCrawler
-from notifier import send_message
+from notifier import send_message, notify_sweet_spot
+from sweet_spot import SweetSpotMatcher
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stdout
+)
 
 def load_seen_items():
     if os.path.exists(DATA_FILE):
@@ -32,6 +41,9 @@ def job():
     
     if is_first_run:
         print("First run detected. Establishing baseline (no notifications)...")
+
+    # Load sweet spot matcher
+    sweet_spot_matcher = SweetSpotMatcher(TARGET_LIST_URL)
 
     # Define crawlers with their listing URLs for the footer link
     crawlers_config = [
@@ -80,6 +92,25 @@ def job():
             
             if new_items_batch:
                 print(f"Found {len(new_items_batch)} NEW items on {crawler_name}")
+                
+                # Sweet Spot check (Independent mechanism)
+                for item in new_items_batch:
+                    try:
+                        price_str = str(item.get('price', '0'))
+                        price_clean = price_str.replace("NT$", "").replace("TWD", "").replace("$", "").replace(",", "").strip()
+                        price_int = int(price_clean)
+                    except ValueError:
+                        price_int = 0
+                        
+                    is_sweet, is_high, target_info = sweet_spot_matcher.check_item(
+                        item_brand=item.get('brand', ''),
+                        item_title=item.get('title', ''),
+                        item_price=price_int
+                    )
+                    
+                    if is_sweet:
+                        print(f"  *** 🚨 甜漏價命中! [{target_info.get('品牌')}] {item['title']}")
+                        notify_sweet_spot(item, is_high, target_info)
                 
                 # Notification Logic:
                 # 1. If global seen is completely empty -> First Run (Baseline)

@@ -59,6 +59,8 @@ class PopChillCrawler(Crawler):
                     cards = page.query_selector_all('a[href^="/zh-TW/product/"]')
                     print(f"[PopChill] Found {len(cards)} items in DOM. Scanning top 100...")
                     
+                    brands_to_track = ["CHANEL", "HERMES", "LOUIS VUITTON", "LV", "DIOR", "CELINE", "GOYARD", "PRADA", "MIU MIU"]
+                    
                     for card in cards[:100]:
                         try:
                             title_el = card.query_selector('div.line-clamp-2')
@@ -70,13 +72,21 @@ class PopChillCrawler(Crawler):
                                 price = price_el.inner_text()
                                 if not link.startswith("http"):
                                     link = "https://www.popchill.com" + link
+                                
+                                # Auto-detect brand for better sweet spot matching
+                                detected_brand = ""
+                                for b in brands_to_track:
+                                    if b.lower() in title.lower():
+                                        detected_brand = b if b != "LV" else "Louis Vuitton"
+                                        break
                                     
                                 items.append({
                                     "id": link,
                                     "title": title,
                                     "price": price,
                                     "link": link,
-                                    "source": "PopChill"
+                                    "source": "PopChill",
+                                    "brand": detected_brand
                                 })
                         except:
                             pass
