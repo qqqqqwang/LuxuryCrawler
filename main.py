@@ -93,24 +93,30 @@ def job():
             if new_items_batch:
                 print(f"Found {len(new_items_batch)} NEW items on {crawler_name}")
                 
-                # Sweet Spot check (Independent mechanism)
+                # Sweet Spot check (Independent mechanism - Wrapped in try-except for Absolute Defense)
                 for item in new_items_batch:
                     try:
-                        price_str = str(item.get('price', '0'))
-                        price_clean = price_str.replace("NT$", "").replace("TWD", "").replace("$", "").replace(",", "").strip()
-                        price_int = int(price_clean)
-                    except ValueError:
-                        price_int = 0
+                        try:
+                            price_str = str(item.get('price', '0'))
+                            price_clean = price_str.replace("NT$", "").replace("TWD", "").replace("$", "").replace(",", "").strip()
+                            price_int = int(price_clean)
+                        except (ValueError, TypeError):
+                            price_int = 0
+                            
+                        is_sweet, is_high, target_info = sweet_spot_matcher.check_item(
+                            item_brand=item.get('brand', ''),
+                            item_title=item.get('title', ''),
+                            item_price=price_int
+                        )
                         
-                    is_sweet, is_high, target_info = sweet_spot_matcher.check_item(
-                        item_brand=item.get('brand', ''),
-                        item_title=item.get('title', ''),
-                        item_price=price_int
-                    )
-                    
-                    if is_sweet:
-                        print(f"  *** 🚨 甜漏價命中! [{target_info.get('品牌')}] {item['title']}")
-                        notify_sweet_spot(item, is_high, target_info)
+                        if is_sweet:
+                            print(f"  *** 🚨 甜漏價命中! [{target_info.get('品牌')}] {item['title']}")
+                            notify_sweet_spot(item, is_high, target_info)
+                    except Exception as e:
+                        print(f"  [SweetSpot Error] Critical defensive skip: {e}")
+                        # Even if sweet spot fails, we continue the loop for other items 
+                        # and let standard notifications proceed.
+                        continue
                 
                 # Notification Logic:
                 # 1. If global seen is completely empty -> First Run (Baseline)
