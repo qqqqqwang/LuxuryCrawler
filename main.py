@@ -25,7 +25,15 @@ def load_seen_items():
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, 'r') as f:
-                return set(json.load(f))
+                seen_list = json.load(f)
+                migrated = set()
+                for item in seen_list:
+                    # Migrate old EcoRing barcodes (pure numbers) to ecoring_ prefix
+                    if str(item).isdigit():
+                        migrated.add(f"ecoring_{item}")
+                    else:
+                        migrated.add(item)
+                return migrated
         except:
             return set()
     return set()

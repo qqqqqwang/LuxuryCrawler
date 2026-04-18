@@ -52,7 +52,7 @@ class EcoRingCrawler(Crawler):
                                         formatted_price = str(price).split('.')[0] if price else "0"
                                         
                                         items.append({
-                                            "id": str(barcode),
+                                            "id": f"ecoring_{barcode}",
                                             "title": title.strip(),
                                             "price": f"NT$ {formatted_price}",
                                             "link": link,
