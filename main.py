@@ -4,13 +4,14 @@ import os
 import sys
 import logging
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, TARGET_LIST_URL
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, URL_FUGETSU, TARGET_LIST_URL
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler
 from crawlers.hermes import HermesCrawler
 from crawlers.area02 import Area02Crawler
 from crawlers.okura import OkuraCrawler
 from crawlers.ecoring import EcoRingCrawler
+from crawlers.fugetsu import FugetsuCrawler
 from notifier import send_message, notify_sweet_spot
 from sweet_spot import SweetSpotMatcher
 
@@ -60,7 +61,8 @@ def job():
         (HermesCrawler(), None, "hermes"),
         (Area02Crawler(), URL_AREA02, "area02"),
         (OkuraCrawler(), URL_OKURA, "okura"),
-        (EcoRingCrawler(), URL_ECORING, "ecoring")
+        (EcoRingCrawler(), URL_ECORING, "ecoring"),
+        (FugetsuCrawler(), URL_FUGETSU, "fugetsu")
     ]
     
     new_items_total = 0
@@ -185,14 +187,16 @@ def job():
                          print(f"Skipping notification for {crawler_name} (New Source Baseline)")
                     else:
                         display_name = crawler_name
-                        if crawler_name == "popchill":
+                        if crawler_name.lower() == "popchill":
                             display_name = "拍拍圈"
-                        elif crawler_name == "area02":
+                        elif crawler_name.lower() == "area02":
                             display_name = "Area02"
-                        elif crawler_name == "okura":
+                        elif crawler_name.lower() == "okura":
                             display_name = "OKURA"
-                        elif crawler_name == "ecoring":
+                        elif crawler_name.lower() == "ecoring":
                             display_name = "EcoRing"
+                        elif crawler_name.lower() == "fugetsu":
+                            display_name = "楓月"
                             
                         msg = f"<b>{display_name} 新品上架：{len(new_items_batch)} 商品</b>\n\n"
                         
