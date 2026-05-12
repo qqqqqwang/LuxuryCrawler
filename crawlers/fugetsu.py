@@ -46,7 +46,7 @@ class FugetsuCrawler(Crawler):
                             "title": title,
                             "price": price,
                             "link": link,
-                            "source": "Fugetsu"
+                            "source": "楓月"
                         })
                     except Exception as e:
                         pass
