@@ -16,7 +16,7 @@ CHECK_INTERVAL_MINUTES = 15
 # URLs
 URL_2NDSTREET = "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest"
 URL_POPCHILL = "https://www.popchill.com/zh-TW/new_products"
-URL_AREA02 = "https://www.area02.com/search?p=43%2C56%2C46%2C47%2C62%2C42%2C52%2C54%2C44%2C232%2C48&b=103%2C130%2C106%2C107%2C136%2C102%2C126%2C128%2C104%2C819%2C108&gp=boutique"
+URL_AREA02 = "https://www.area02.com/zh-TW/tag/boutique"
 URL_OKURA = "https://taiwan.wb-ookura.com/collections/product-list?sort_by=created-descending"
 URL_ECORING = "https://shop.eco-ring.com.tw/catalogue?tab=bargain-sale&sort=newest"
 URL_FUGETSU = "https://brandfugetsu.com/Form/Product/ProductList.aspx?cicon=1&udns=1"

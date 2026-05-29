@@ -1,5 +1,6 @@
 import requests
 import json
+import urllib.parse
 from .base import Crawler
 
 class Area02Crawler(Crawler):
@@ -52,11 +53,16 @@ class Area02Crawler(Crawler):
                 price_val = h.get('price_info', {}).get('TWD', 0)
                 price = f"NT$ {int(price_val):,}" if price_val else "NT$ 0"
                 
-                sku = h.get('sku')
-                if not sku:
+                hash_key = h.get('hash_key')
+                brand = h.get('brand')
+                
+                if not hash_key or not brand:
                     continue
                     
-                link = f"https://www.area02.com/item/{sku}"
+                brand_path = brand.lower().replace(' ', '-')
+                slug = urllib.parse.quote(title.replace(' ', '-').replace('/', '-').lower())
+                
+                link = f"https://www.area02.com/{brand_path}/{brand_path}/i-{hash_key}--{slug}"
                 
                 items.append({
                     "id": link,
