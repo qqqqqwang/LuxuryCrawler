@@ -4,9 +4,9 @@ import os
 import sys
 import logging
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, URL_FUGETSU, TARGET_LIST_URL
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, URL_FUGETSU, TARGET_LIST_URL, SWEET_SPOT_TG_CHAT_ID
 from crawlers.second_street import SecondStreetCrawler
-from crawlers.popchill import PopChillCrawler
+from crawlers.popchill import PopChillCrawler, PopChillPriceDropCrawler
 from crawlers.hermes import HermesCrawler
 from crawlers.area02 import Area02Crawler
 from crawlers.okura import OkuraCrawler
@@ -58,6 +58,7 @@ def job():
     crawlers_config = [
         (SecondStreetCrawler(), None, "2ndstreet"),
         (PopChillCrawler(), URL_POPCHILL, "popchill"),
+        (PopChillPriceDropCrawler(), "https://www.popchill.com/zh-TW/price_drop_products", "popchill_drop"),
         (HermesCrawler(), None, "hermes"),
         (Area02Crawler(), URL_AREA02, "area02"),
         (OkuraCrawler(), URL_OKURA, "okura"),
@@ -180,6 +181,28 @@ def job():
                             msg += f"...and {len(items) - 10} more.\n"
                     
                         send_message(msg)
+                
+                # Handling for PopChill Price Drop (Special channel notification)
+                elif crawler_name == "PopChillPriceDrop":
+                    if not has_history:
+                        print(f"Skipping notification for {crawler_name} (New Source Baseline)")
+                    else:
+                        msg = f"📉 <b>拍拍圈降價：發現 {len(new_items_batch)} 個降價商品</b>\n\n"
+                        
+                        for item in new_items_batch[:10]:
+                            price_display = item['price'].replace("NT$", "").replace("TWD", "").replace("$", "").strip()
+                            msg += f"• {item['title']} 【TWD {price_display}】 👉 <a href='{item['link']}'>前往商品</a>\n\n"
+                        
+                        if len(new_items_batch) > 10:
+                            msg += f"...and {len(new_items_batch) - 10} more.\n"
+                            
+                        msg += f"\n<a href='{listing_url}'>查看所有降價商品</a>"
+                        
+                        if SWEET_SPOT_TG_CHAT_ID:
+                            send_message(msg, chat_ids=[SWEET_SPOT_TG_CHAT_ID])
+                        else:
+                            print("No SWEET_SPOT_TG_CHAT_ID found. Falling back to default.")
+                            send_message(msg)
                 
                 # Handling for PopChill (General notifications)
                 else:

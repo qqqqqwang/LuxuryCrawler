@@ -97,3 +97,100 @@ class PopChillCrawler(Crawler):
         except Exception as e:
             print(f"Error in PopChillCrawler: {e}")
         return items
+
+class PopChillPriceDropCrawler(Crawler):
+    def get_new_items(self):
+        url = "https://www.popchill.com/zh-TW/price_drop_products"
+        items = []
+        try:
+            # User reports Desktop Web is fresher, so we fix UA to Desktop Chrome
+            user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            
+            with sync_playwright() as p:
+                # Launch with args to hide automation
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=[
+                        '--disable-blink-features=AutomationControlled',
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox'
+                    ]
+                )
+                context = browser.new_context(
+                    user_agent=user_agent,
+                    locale="zh-TW",
+                    timezone_id="Asia/Taipei",
+                    viewport={'width': 1920, 'height': 1080}
+                )
+                
+                # Add stealth script
+                context.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined
+                    });
+                """)
+                
+                page = context.new_page()
+                print(f"DEBUG: Navigating to {url} with UA {user_agent}...")
+                page.goto(url, wait_until="networkidle") # Wait for network to settle
+                
+                # Wait longer and try to identify why it fails
+                try:
+                    page.wait_for_selector('a[href^="/zh-TW/product/"]', timeout=45000)
+                except Exception as e:
+                    print(f"DEBUG: Timeout on PopChill Drop. Content preview: {page.content()[:500]}")
+                    browser.close()
+                    return []
+                
+                # Scroll once to ensure we have enough items (Initial load is 100, scroll makes it 200)
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(1500)
+                
+                # Extract items
+                try:
+                    # Select product cards
+                    cards = page.query_selector_all('a[href^="/zh-TW/product/"]')
+                    print(f"[PopChill Drop] Found {len(cards)} items in DOM. Scanning top 100...")
+                    
+                    brands_to_track = ["CHANEL", "HERMES", "LOUIS VUITTON", "LV", "DIOR", "CELINE", "GOYARD", "PRADA", "MIU MIU"]
+                    
+                    for card in cards[:100]:
+                        try:
+                            title_el = card.query_selector('div.line-clamp-2')
+                            price_el = card.query_selector('div.font-bold')
+                            link = card.get_attribute("href")
+                            
+                            if title_el and price_el and link:
+                                title = title_el.inner_text()
+                                price = price_el.inner_text()
+                                if not link.startswith("http"):
+                                    link = "https://www.popchill.com" + link
+                                
+                                # Auto-detect brand for better sweet spot matching
+                                detected_brand = ""
+                                for b in brands_to_track:
+                                    if b.lower() in title.lower():
+                                        detected_brand = b if b != "LV" else "Louis Vuitton"
+                                        break
+                                
+                                # Use price in ID to treat price drops as new items
+                                item_id = f"popchill_drop_{link}_{price}"
+                                    
+                                items.append({
+                                    "id": item_id,
+                                    "title": title,
+                                    "price": price,
+                                    "link": link,
+                                    "source": "PopChill",
+                                    "brand": detected_brand
+                                })
+                        except:
+                            pass
+                except Exception as e:
+                    print(f"Error parsing PopChill Drop items: {e}")
+                
+                browser.close()
+        except Exception as e:
+            print(f"Error in PopChillPriceDropCrawler: {e}")
+        return items
+
