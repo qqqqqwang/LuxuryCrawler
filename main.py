@@ -122,7 +122,7 @@ def job():
                         
                         if is_sweet:
                             print(f"  *** 🚨 甜漏價命中! [{target_info.get('品牌')}] {item['title']}")
-                            notify_sweet_spot(item, is_high, target_info)
+                            # notify_sweet_spot(item, is_high, target_info) # Temporarily disabled by user
                     except Exception as e:
                         print(f"  [SweetSpot Error] Critical defensive skip: {e}")
                         # Even if sweet spot fails, we continue the loop for other items 
