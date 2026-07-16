@@ -20,6 +20,7 @@ URL_AREA02 = "https://www.area02.com/zh-TW/tag/boutique"
 URL_OKURA = "https://taiwan.wb-ookura.com/collections/product-list?sort_by=created-descending"
 URL_ECORING = "https://shop.eco-ring.com.tw/catalogue?tab=bargain-sale&sort=newest"
 URL_FUGETSU = "https://brandfugetsu.com/Form/Product/ProductList.aspx?cicon=1&udns=1"
+URL_TOWERWATCH = "https://www.towerwatch.tw/products?sort_by=created_at&order_by=desc"
 
 # Filter Config
 EXCLUDED_KEYWORDS = ["Coach", "Tory Burch"]
