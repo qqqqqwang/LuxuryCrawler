@@ -39,7 +39,12 @@ SECOND_STREET_BRANDS = {
     "GOYARD": 'https://store.2ndstreet.com.tw/v2/Search?q=%22GOYARD%22&shopId=41320&order=Newest',
     "ISSEY MIYAKE": "https://store.2ndstreet.com.tw/v2/Search?q=ISSEY+MIYAKE&shopId=41320&order=Newest",
     "YSL": "https://store.2ndstreet.com.tw/v2/Search?q=%22SAINT+LAURENT%22&shopId=41320&order=Newest&priceRange=&page=1&limit=20&sort=21",
-    "LOEWE": "https://store.2ndstreet.com.tw/v2/Search?q=%22LOEWE%22&shopId=41320&order=Newest"
+    "LOEWE": "https://store.2ndstreet.com.tw/v2/Search?q=%22LOEWE%22&shopId=41320&order=Newest",
+    "FENDI": "https://store.2ndstreet.com.tw/v2/Search?q=%22Fendi%22&shopId=41320&order=Newest",
+    "MONCLER": "https://store.2ndstreet.com.tw/v2/Search?q=%22Moncler%22&shopId=41320&order=Newest",
+    "ROGER VIVIER": "https://store.2ndstreet.com.tw/v2/Search?q=%22roger+vivier%22&shopId=41320&order=Newest",
+    "THE ROW": "https://store.2ndstreet.com.tw/v2/Search?q=%22the+row%22&shopId=41320&order=Newest",
+    "VIVIENNE WESTWOOD": "https://store.2ndstreet.com.tw/v2/Search?q=%22westwood%22&shopId=41320&order=Newest"
 }
 
 # Hermes URLs

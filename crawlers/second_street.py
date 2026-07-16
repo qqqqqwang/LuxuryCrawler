@@ -50,6 +50,10 @@ class SecondStreetCrawler(Crawler):
                                 
                                 if title_el and price_el and link:
                                     title = title_el.inner_text()
+                                    
+                                    if brand_name == "THE ROW" and "THE ROW" not in title.upper():
+                                        continue
+                                        
                                     price = price_el.inner_text()
                                     if not link.startswith("http"):
                                         link = "https://store.2ndstreet.com.tw" + link
