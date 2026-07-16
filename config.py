@@ -37,7 +37,9 @@ SECOND_STREET_BRANDS = {
     "PRADA": 'https://store.2ndstreet.com.tw/v2/Search?q=%22PRADA%22&shopId=41320&order=Newest',
     "DIOR": 'https://store.2ndstreet.com.tw/v2/Search?q=%22DIOR%22&shopId=41320&order=Newest',
     "GOYARD": 'https://store.2ndstreet.com.tw/v2/Search?q=%22GOYARD%22&shopId=41320&order=Newest',
-    "ISSEY MIYAKE": "https://store.2ndstreet.com.tw/v2/Search?q=ISSEY+MIYAKE&shopId=41320&order=Newest"
+    "ISSEY MIYAKE": "https://store.2ndstreet.com.tw/v2/Search?q=ISSEY+MIYAKE&shopId=41320&order=Newest",
+    "YSL": "https://store.2ndstreet.com.tw/v2/Search?q=%22SAINT+LAURENT%22&shopId=41320&order=Newest&priceRange=&page=1&limit=20&sort=21",
+    "LOEWE": "https://store.2ndstreet.com.tw/v2/Search?q=%22LOEWE%22&shopId=41320&order=Newest"
 }
 
 # Hermes URLs
