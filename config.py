@@ -13,6 +13,10 @@ TARGET_LIST_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI1lVm7yebr_
 # This is now controlled by GitHub Actions schedule, but we keep a fallback or unused const
 CHECK_INTERVAL_MINUTES = 15 
 
+# Brand Off URLs
+URL_BRANDOFF = "https://www.brandoff.tw/shop/brand"
+URL_BRANDOFF_NEW = "https://tokyotw.brandoff.tw/Form/Product/ProductList.aspx?shop=0&cat=&dpcnt=20&img=1&sort=07&udns=2&fpfl=0&sfl=0&pno=1"
+
 # URLs
 URL_2NDSTREET = "https://store.2ndstreet.com.tw/v2/official/SalePageCategory/442462?sortMode=Newest"
 URL_POPCHILL = "https://www.popchill.com/zh-TW/new_products"

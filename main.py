@@ -4,7 +4,7 @@ import os
 import sys
 import logging
 from datetime import datetime
-from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, URL_FUGETSU, URL_TOWERWATCH, TARGET_LIST_URL, SWEET_SPOT_TG_CHAT_ID
+from config import DATA_FILE, EXCLUDED_KEYWORDS, SECOND_STREET_BRANDS, URL_POPCHILL, URL_AREA02, URL_OKURA, URL_ECORING, URL_FUGETSU, URL_TOWERWATCH, URL_BRANDOFF_NEW, TARGET_LIST_URL, SWEET_SPOT_TG_CHAT_ID
 from crawlers.second_street import SecondStreetCrawler
 from crawlers.popchill import PopChillCrawler, PopChillPriceDropCrawler
 from crawlers.hermes import HermesCrawler
@@ -13,6 +13,7 @@ from crawlers.okura import OkuraCrawler
 from crawlers.ecoring import EcoRingCrawler
 from crawlers.fugetsu import FugetsuCrawler
 from crawlers.towerwatch import TowerWatchCrawler
+from crawlers.brandoff import BrandOffCrawler
 from notifier import send_message, notify_sweet_spot
 from sweet_spot import SweetSpotMatcher
 
@@ -65,7 +66,8 @@ def job():
         (OkuraCrawler(), URL_OKURA, "okura"),
         (EcoRingCrawler(), URL_ECORING, "ecoring"),
         (FugetsuCrawler(), URL_FUGETSU, "fugetsu"),
-        (TowerWatchCrawler(), URL_TOWERWATCH, "towerwatch")
+        (TowerWatchCrawler(), URL_TOWERWATCH, "towerwatch"),
+        (BrandOffCrawler(), URL_BRANDOFF_NEW, "brandoff")
     ]
     
     new_items_total = 0
