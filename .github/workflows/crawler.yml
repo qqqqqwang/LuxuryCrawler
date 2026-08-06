@@ -8,6 +8,8 @@ on:
 jobs:
   crawl:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout code
@@ -36,4 +38,5 @@ jobs:
         git config --global user.email 'bot@noreply.github.com'
         git add seen_items.json
         git commit -m "Update seen items" || exit 0
+        git pull --rebase origin main || true
         git push
