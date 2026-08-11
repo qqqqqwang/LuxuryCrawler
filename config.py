@@ -49,7 +49,8 @@ SECOND_STREET_BRANDS = {
     "MONCLER": "https://store.2ndstreet.com.tw/v2/Search?q=%22Moncler%22&shopId=41320&order=Newest",
     "ROGER VIVIER": "https://store.2ndstreet.com.tw/v2/Search?q=%22roger+vivier%22&shopId=41320&order=Newest",
     "THE ROW": "https://store.2ndstreet.com.tw/v2/Search?q=%22the+row%22&shopId=41320&order=Newest",
-    "VIVIENNE WESTWOOD": "https://store.2ndstreet.com.tw/v2/Search?q=%22westwood%22&shopId=41320&order=Newest"
+    "VIVIENNE WESTWOOD": "https://store.2ndstreet.com.tw/v2/Search?q=%22westwood%22&shopId=41320&order=Newest",
+    "ACNE STUDIOS": "https://store.2ndstreet.com.tw/v2/Search?q=%22Acne+Studios%28Acne%29%22&shopId=41320&order=Newest"
 }
 
 # Hermes URLs
