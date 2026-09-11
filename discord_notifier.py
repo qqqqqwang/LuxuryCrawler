@@ -16,6 +16,8 @@ def send_discord_webhook(webhook_url, payload):
     if not webhook_url:
         return
         
+    import time
+    
     try:
         response = requests.post(
             webhook_url,
@@ -23,9 +25,20 @@ def send_discord_webhook(webhook_url, payload):
             headers={'Content-Type': 'application/json'},
             timeout=10
         )
+        if response.status_code == 429:
+            retry_after = response.json().get("retry_after", 1)
+            time.sleep(retry_after)
+            response = requests.post(
+                webhook_url,
+                data=json.dumps(payload),
+                headers={'Content-Type': 'application/json'},
+                timeout=10
+            )
+            
         if not response.ok:
             print(f"Discord API Error: {response.status_code} - {response.text}")
         response.raise_for_status()
+        time.sleep(0.5)  # Rate limit prevention (5 req / 2 sec)
     except Exception as e:
         print(f"Failed to send Discord webhook: {e}")
 
