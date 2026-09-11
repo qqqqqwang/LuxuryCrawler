@@ -10,24 +10,30 @@ from config import (
 )
 
 BRAND_COLORS = {
-    "CHANEL": 0,           # Black
-    "LOUIS VUITTON": 9070381,  # Brown (#8A5A44)
+    "CHANEL": 0,           # Black (0x000000)
+    "LOUIS VUITTON": 9070381,  # Brown (0x8A5A44)
     "LV": 9070381,         
-    "HERMES": 16738048,    # Hermes Orange (#FF6600)
-    "DIOR": 14540253,      # Light Pink / Beige
-    "GUCCI": 1636259,      # Dark Green (#18F863)
-    "PRADA": 0,            # Black
-    "CELINE": 0,           # Black
-    "GOYARD": 16766720,    # Yellow
-    "SAINT LAURENT": 0,    # Black
-    "YSL": 0,              # Black
-    "FENDI": 16766720,     # Yellow
-    "LOEWE": 12558434,     # Beige/Tan
-    "BVLGARI": 10824234,   # Purple/Pink
-    "BOTTEGA VENETA": 32768, # BV Green
-    "THE ROW": 0,
-    "BURBERRY": 13350020,  # Beige/Red
-    "VIVIENNE WESTWOOD": 13369344, # Red
+    "HERMES": 16738048,    # Hermes Orange (0xFF6600)
+    "DIOR": 12632256,      # Silver/Grey (0xC0C0C0)
+    "GUCCI": 11469824,     # Gucci Red (0xAF0000)
+    "PRADA": 128,          # Navy Blue (0x000080)
+    "CELINE": 8388608,     # Burgundy (0x800000)
+    "GOYARD": 16766720,    # Bright Yellow (0xFFD700)
+    "SAINT LAURENT": 7829367, # Dark Grey (0x777777)
+    "YSL": 7829367,        # Dark Grey (0x777777)
+    "FENDI": 14329120,     # Mustard/Gold (0xDAA520)
+    "LOEWE": 12558434,     # Tan/Beige (0xBFA162)
+    "BVLGARI": 8388736,    # Purple (0x800080)
+    "BOTTEGA VENETA": 32768, # BV Green (0x008000)
+    "THE ROW": 3100495,    # Dark Slate (0x2F4F4F)
+    "BURBERRY": 14404531,  # Burberry Plaid Beige (0xDBBCA3)
+    "VIVIENNE WESTWOOD": 13369344, # Westwood Red (0xCC0000)
+    "BALENCIAGA": 3426654, # Dark Blue/Grey (0x34495E)
+    "MIU MIU": 16758465,   # Light Pink (0xFFB6C1)
+    "ISSEY MIYAKE": 11184810, # Light Grey (0xAAAAAA)
+    "MONCLER": 16711680,   # Pure Red (0xFF0000)
+    "ROGER VIVIER": 14822765, # Magenta (0xE22A6D)
+    "ACNE STUDIOS": 16761035, # Acne Pink (0xFFC0CB)
 }
 
 def get_brand_color(brand, default_color):
