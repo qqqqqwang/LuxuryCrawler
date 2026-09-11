@@ -89,7 +89,7 @@ def notify_2ndstreet_discord(brand_items):
                 "url": link,
                 "color": 3447003,
                 "author": {
-                    "name": f"✨ 2nd Street | {brand}",
+                    "name": f"✨ 2nd Street | {brand} (共 {len(items)} 件)",
                     "url": brand_url if brand_url else link,
                 },
                 "fields": [
@@ -187,6 +187,7 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
             author_name = f"{title_prefix} | {display_name}"
             if brand != "未分類":
                 author_name += f" | {brand}"
+            author_name += f" (共 {len(b_items)} 件)"
                 
             embed = {
                 "title": title[:256],
