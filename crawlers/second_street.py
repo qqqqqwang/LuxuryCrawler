@@ -23,6 +23,14 @@ class SecondStreetCrawler(Crawler):
                     user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
                 )
                 
+                # Force TWD currency to prevent US IP from getting USD
+                context.add_cookies([{
+                    'name': 'currency',
+                    'value': 'TWD',
+                    'domain': 'store.2ndstreet.com.tw',
+                    'path': '/'
+                }])
+                
                 # Add stealth script
                 context.add_init_script("""
                     Object.defineProperty(navigator, 'webdriver', {

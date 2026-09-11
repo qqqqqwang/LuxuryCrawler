@@ -27,14 +27,21 @@ def send_discord_webhook(webhook_url, payload):
     except Exception as e:
         print(f"Failed to send Discord webhook: {e}")
 
+import re
+
 def format_price(price_str):
     """Clean and format price for display."""
     if isinstance(price_str, str):
-        clean_price = "".join(filter(str.isdigit, price_str))
-        try:
-            return f"{int(clean_price):,}"
-        except:
-            return price_str
+        match = re.search(r'[\d,]+(?:\.\d+)?', price_str)
+        if match:
+            clean_price = match.group().replace(',', '')
+            try:
+                if '.' in clean_price:
+                    return f"{float(clean_price):,.2f}"
+                else:
+                    return f"{int(clean_price):,}"
+            except:
+                pass
     try:
         return f"{int(price_str):,}"
     except:
