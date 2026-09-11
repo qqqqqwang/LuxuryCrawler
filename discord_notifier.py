@@ -23,6 +23,8 @@ def send_discord_webhook(webhook_url, payload):
             headers={'Content-Type': 'application/json'},
             timeout=10
         )
+        if not response.ok:
+            print(f"Discord API Error: {response.status_code} - {response.text}")
         response.raise_for_status()
     except Exception as e:
         print(f"Failed to send Discord webhook: {e}")
@@ -61,7 +63,10 @@ def notify_2ndstreet_discord(brand_items):
         brand_url = SECOND_STREET_BRANDS.get(brand, "")
         
         for item in items:
-            title = item.get('title', '商品名稱未定')
+            title = item.get('title')
+            if not title:
+                title = '商品名稱未定'
+            title = title[:256]
             price = format_price(item.get('price', '0'))
             link = item.get('link', '')
             image_url = item.get('image', '')
@@ -154,7 +159,10 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
     
     for brand, b_items in brand_items.items():
         for item in b_items:
-            title = item.get('title', '商品名稱未定')
+            title = item.get('title')
+            if not title:
+                title = '商品名稱未定'
+            title = title[:256]
             price = format_price(item.get('price', '0'))
             link = item.get('link', '')
             image_url = item.get('image', '')
