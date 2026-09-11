@@ -138,8 +138,7 @@ def notify_2ndstreet_discord(brand_items):
             if image_url:
                 embed["thumbnail"] = {"url": image_url}
                 
-            if i == 9 and len(items) > 10:
-                embed["footer"] = {"text": f"還有 {len(items) - 10} 件商品未顯示，可點擊上方標題查看"}
+            embed["footer"] = {"text": f"📍 {brand} ( {i+1} / {len(items)} ) ｜ 點擊上方標題看更多 👆"}
                 
             embeds.append(embed)
             
@@ -202,8 +201,7 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
         if image_url:
             embed["thumbnail"] = {"url": image_url}
             
-        if i == 9 and len(items) > 10:
-            embed["footer"] = {"text": f"還有 {len(items) - 10} 件商品未顯示，可點擊上方標題查看"}
+        embed["footer"] = {"text": f"📍 本批上新 ( {i+1} / {len(items)} ) ｜ 點擊上方標題看更多 👆"}
             
         embeds.append(embed)
         
