@@ -30,6 +30,10 @@ jobs:
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        DISCORD_WEBHOOK_2NDSTREET: ${{ secrets.DISCORD_WEBHOOK_2NDSTREET }}
+        DISCORD_WEBHOOK_POPCHILL: ${{ secrets.DISCORD_WEBHOOK_POPCHILL }}
+        DISCORD_WEBHOOK_ECORING: ${{ secrets.DISCORD_WEBHOOK_ECORING }}
+        DISCORD_WEBHOOK_OTHERS: ${{ secrets.DISCORD_WEBHOOK_OTHERS }}
       run: python main.py
       
     - name: Commit and push if changed

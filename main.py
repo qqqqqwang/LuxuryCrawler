@@ -15,6 +15,7 @@ from crawlers.fugetsu import FugetsuCrawler
 from crawlers.towerwatch import TowerWatchCrawler
 from crawlers.brandoff import BrandOffCrawler
 from notifier import send_message, notify_sweet_spot
+from discord_notifier import notify_2ndstreet_discord, notify_platform_discord
 from sweet_spot import SweetSpotMatcher
 
 # Set up logging
@@ -160,6 +161,8 @@ def job():
                                 msg += f"✨ <b>{brand}</b> ({len(items)}件) 👉 <a href='{brand_url}'>查看頁面</a>\n\n"
                                 
                             send_message(msg.strip())
+                        
+                        notify_2ndstreet_discord(brand_items)
                 
                 # Handling for Hermes (Category-specific notifications)
                 elif crawler_name == "Hermes":
@@ -185,6 +188,8 @@ def job():
                             msg += f"...and {len(items) - 10} more.\n"
                     
                         send_message(msg)
+                    
+                    notify_platform_discord(crawler_name, new_items_batch, listing_url)
                 
                 # Handling for PopChill Price Drop (Special channel notification)
                 elif crawler_name == "PopChillPriceDrop":
@@ -207,6 +212,8 @@ def job():
                         else:
                             print("No SWEET_SPOT_TG_CHAT_ID found. Falling back to default.")
                             send_message(msg)
+                            
+                        notify_platform_discord(crawler_name, new_items_batch, listing_url, is_price_drop=True)
                 
                 # Handling for PopChill (General notifications)
                 else:
@@ -237,6 +244,7 @@ def job():
                         msg += f"\n<a href='{listing_url}'>View All New Items</a>"
                         
                         send_message(msg)
+                        notify_platform_discord(crawler_name, new_items_batch, listing_url)
                     
                 new_items_total += len(new_items_batch)
             else:

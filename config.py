@@ -1,10 +1,27 @@
 import os
 
+# Try to manually load .env if it exists (for local testing without python-dotenv)
+try:
+    with open('.env', 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, val = line.split('=', 1)
+                os.environ[key] = val
+except Exception:
+    pass
 # Telegram Config
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 # Support multiple chat IDs separated by comma
 TELEGRAM_CHAT_IDS = os.getenv("TELEGRAM_CHAT_ID", "").split(",")
 SWEET_SPOT_TG_CHAT_ID = os.getenv("SWEET_SPOT_TG_CHAT_ID", "-5234775671")
+
+# Discord Webhook Config
+DISCORD_WEBHOOK_2NDSTREET = os.getenv("DISCORD_WEBHOOK_2NDSTREET")
+DISCORD_WEBHOOK_POPCHILL = os.getenv("DISCORD_WEBHOOK_POPCHILL")
+DISCORD_WEBHOOK_ECORING = os.getenv("DISCORD_WEBHOOK_ECORING")
+DISCORD_WEBHOOK_OTHERS = os.getenv("DISCORD_WEBHOOK_OTHERS")
+
 
 # Sweet Spot Target List
 TARGET_LIST_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI1lVm7yebr_c2YFVYaCrcorVfj9vg5pXjcK4Bxw6PsSWJCXXaLdE4Me9m__6PDCEOo3OGScSMSKp6/pub?output=csv"
