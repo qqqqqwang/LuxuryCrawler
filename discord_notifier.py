@@ -1,5 +1,9 @@
 import requests
 import json
+import random
+import time
+import re
+
 from config import (
     DISCORD_WEBHOOK_2NDSTREET,
     DISCORD_WEBHOOK_POPCHILL,
@@ -9,6 +13,24 @@ from config import (
     SECOND_STREET_BRANDS
 )
 
+BATCH_COLORS = [
+    3447003,   # Blue
+    15277667,  # Pink
+    16738048,  # Orange
+    1636259,   # Green
+    10824234,  # Purple
+    16766720,  # Yellow
+    11469824,  # Red
+    8388608,   # Burgundy
+    3100495,   # Slate
+    32768,     # BV Green
+    14404531,  # Beige
+    3426654,   # Dark Blue
+]
+
+# Single random color for the entire lifecycle of this script run
+RUN_COLOR = random.choice(BATCH_COLORS)
+
 def send_discord_webhook(webhook_url, payload):
     """
     Sends a payload to a Discord Webhook.
@@ -16,8 +38,6 @@ def send_discord_webhook(webhook_url, payload):
     if not webhook_url:
         return
         
-    import time
-    
     try:
         response = requests.post(
             webhook_url,
@@ -42,8 +62,6 @@ def send_discord_webhook(webhook_url, payload):
     except Exception as e:
         print(f"Failed to send Discord webhook: {e}")
 
-import re
-
 def format_price(price_str):
     """Clean and format price for display."""
     if isinstance(price_str, str):
@@ -62,6 +80,7 @@ def format_price(price_str):
     except:
         return str(price_str)
 
+
 def notify_2ndstreet_discord(brand_items):
     if not DISCORD_WEBHOOK_2NDSTREET:
         return
@@ -79,8 +98,8 @@ def notify_2ndstreet_discord(brand_items):
             
     overview_embed = {
         "title": "📋 2nd Street | 本次新品上架總覽",
-        "color": 3447003,
-        "description": "\n".join(desc_lines)
+        "color": RUN_COLOR,
+        "description": "\\n".join(desc_lines)
     }
     
     if desc_lines:
@@ -102,7 +121,7 @@ def notify_2ndstreet_discord(brand_items):
             embed = {
                 "title": title[:256],
                 "url": link,
-                "color": 3447003, # Same color for the whole platform
+                "color": RUN_COLOR,
                 "author": {
                     "name": f"✨ 2nd Street | {brand} (共 {len(items)} 件)",
                     "url": brand_url if brand_url else link,
@@ -134,21 +153,17 @@ def notify_2ndstreet_discord(brand_items):
 
 def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=False):
     webhook_url = DISCORD_WEBHOOK_OTHERS
-    color = 9807270  # Grey default
     display_name = crawler_name
     
     if crawler_name.lower() == "popchill":
         webhook_url = DISCORD_WEBHOOK_POPCHILL
         display_name = "拍拍圈"
-        color = 15277667  # Pink
     elif crawler_name.lower() == "popchillpricedrop":
         webhook_url = DISCORD_WEBHOOK_POPCHILL_DROP
         display_name = "拍拍圈"
-        color = 15277667  # Pink
     elif crawler_name.lower() == "ecoring":
         webhook_url = DISCORD_WEBHOOK_ECORING
         display_name = "EcoRing"
-        color = 3447003   # Blue
 
     if not webhook_url:
         return
@@ -170,7 +185,7 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
         embed = {
             "title": title[:256],
             "url": link,
-            "color": color,
+            "color": RUN_COLOR,
             "author": {
                 "name": author_name,
                 "url": listing_url if listing_url else link,
