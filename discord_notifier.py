@@ -9,6 +9,34 @@ from config import (
     SECOND_STREET_BRANDS
 )
 
+BRAND_COLORS = {
+    "CHANEL": 0,           # Black
+    "LOUIS VUITTON": 9070381,  # Brown (#8A5A44)
+    "LV": 9070381,         
+    "HERMES": 16738048,    # Hermes Orange (#FF6600)
+    "DIOR": 14540253,      # Light Pink / Beige
+    "GUCCI": 1636259,      # Dark Green (#18F863)
+    "PRADA": 0,            # Black
+    "CELINE": 0,           # Black
+    "GOYARD": 16766720,    # Yellow
+    "SAINT LAURENT": 0,    # Black
+    "YSL": 0,              # Black
+    "FENDI": 16766720,     # Yellow
+    "LOEWE": 12558434,     # Beige/Tan
+    "BVLGARI": 10824234,   # Purple/Pink
+    "BOTTEGA VENETA": 32768, # BV Green
+    "THE ROW": 0,
+    "BURBERRY": 13350020,  # Beige/Red
+    "VIVIENNE WESTWOOD": 13369344, # Red
+}
+
+def get_brand_color(brand, default_color):
+    b_upper = brand.upper()
+    for b, c in BRAND_COLORS.items():
+        if b in b_upper:
+            return c
+    return default_color
+
 def send_discord_webhook(webhook_url, payload):
     """
     Sends a payload to a Discord Webhook.
@@ -72,8 +100,26 @@ def notify_2ndstreet_discord(brand_items):
 
     embeds = []
     
+    # 1. Overview Card
+    overview_embed = {
+        "title": "📋 2nd Street | 本次新品上架總覽",
+        "color": 3447003,
+        "fields": []
+    }
+    for brand, items in brand_items.items():
+        overview_embed["fields"].append({
+            "name": brand,
+            "value": f"共 {len(items)} 件",
+            "inline": True
+        })
+    # Only add overview if there's actually something to show
+    if overview_embed["fields"]:
+        embeds.append(overview_embed)
+    
+    # 2. Individual Item Cards
     for brand, items in brand_items.items():
         brand_url = SECOND_STREET_BRANDS.get(brand, "")
+        brand_color = get_brand_color(brand, 3447003)
         
         for i, item in enumerate(items[:10]):
             title = item.get('title')
@@ -87,7 +133,7 @@ def notify_2ndstreet_discord(brand_items):
             embed = {
                 "title": title[:256],
                 "url": link,
-                "color": 3447003,
+                "color": brand_color,
                 "author": {
                     "name": f"✨ 2nd Street | {brand} (共 {len(items)} 件)",
                     "url": brand_url if brand_url else link,
@@ -174,7 +220,25 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
     embeds = []
     title_prefix = "📉 降價通知" if is_price_drop else "✨ 新品上架"
     
+    # 1. Overview Card
+    overview_embed = {
+        "title": f"📋 {display_name} | {title_prefix}總覽",
+        "color": color,
+        "fields": []
+    }
     for brand, b_items in brand_items.items():
+        overview_embed["fields"].append({
+            "name": brand,
+            "value": f"共 {len(b_items)} 件",
+            "inline": True
+        })
+    if overview_embed["fields"]:
+        embeds.append(overview_embed)
+    
+    # 2. Individual Item Cards
+    for brand, b_items in brand_items.items():
+        brand_color = get_brand_color(brand, color)
+        
         for i, item in enumerate(b_items[:10]):
             title = item.get('title')
             if not title:
@@ -192,7 +256,7 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
             embed = {
                 "title": title[:256],
                 "url": link,
-                "color": color,
+                "color": brand_color,
                 "author": {
                     "name": author_name,
                     "url": listing_url if listing_url else link,
