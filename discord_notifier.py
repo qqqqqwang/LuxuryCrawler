@@ -75,7 +75,7 @@ def notify_2ndstreet_discord(brand_items):
     for brand, items in brand_items.items():
         brand_url = SECOND_STREET_BRANDS.get(brand, "")
         
-        for item in items:
+        for i, item in enumerate(items[:10]):
             title = item.get('title')
             if not title:
                 title = '商品名稱未定'
@@ -108,6 +108,10 @@ def notify_2ndstreet_discord(brand_items):
             
             if image_url:
                 embed["thumbnail"] = {"url": image_url}
+                
+            # If this is the 10th item and there are more, add a footer note
+            if i == 9 and len(items) > 10:
+                embed["footer"] = {"text": f"還有 {len(items) - 10} 件 {brand} 商品未顯示，請點擊連結查看..."}
                 
             embeds.append(embed)
             
@@ -171,7 +175,7 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
     title_prefix = "📉 降價通知" if is_price_drop else "✨ 新品上架"
     
     for brand, b_items in brand_items.items():
-        for item in b_items:
+        for i, item in enumerate(b_items[:10]):
             title = item.get('title')
             if not title:
                 title = '商品名稱未定'
@@ -210,6 +214,9 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
                 
             if image_url:
                 embed["thumbnail"] = {"url": image_url}
+                
+            if i == 9 and len(b_items) > 10:
+                embed["footer"] = {"text": f"還有 {len(b_items) - 10} 件商品未顯示，請點擊連結查看..."}
                 
             embeds.append(embed)
             
