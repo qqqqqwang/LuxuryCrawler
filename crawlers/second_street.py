@@ -68,11 +68,16 @@ class SecondStreetCrawler(Crawler):
                                         
                                     # Try to extract image
                                     image_url = ""
-                                    img_el = card.query_selector('img')
+                                    img_el = card.query_selector('img.product-card__vertical__media')
                                     if img_el:
                                         src = img_el.get_attribute('src')
                                         if src:
-                                            image_url = src if src.startswith("http") else "https://store.2ndstreet.com.tw" + src
+                                            if src.startswith("//"):
+                                                image_url = "https:" + src
+                                            elif src.startswith("http"):
+                                                image_url = src
+                                            else:
+                                                image_url = "https://store.2ndstreet.com.tw" + src
                                     
                                     items.append({
                                         "id": link,
