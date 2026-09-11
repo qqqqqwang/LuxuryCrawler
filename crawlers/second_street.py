@@ -57,12 +57,21 @@ class SecondStreetCrawler(Crawler):
                                     price = price_el.inner_text()
                                     if not link.startswith("http"):
                                         link = "https://store.2ndstreet.com.tw" + link
+                                        
+                                    # Try to extract image
+                                    image_url = ""
+                                    img_el = card.query_selector('img')
+                                    if img_el:
+                                        src = img_el.get_attribute('src')
+                                        if src:
+                                            image_url = src if src.startswith("http") else "https://store.2ndstreet.com.tw" + src
                                     
                                     items.append({
                                         "id": link,
                                         "title": title,
                                         "price": price,
                                         "link": link,
+                                        "image": image_url,
                                         "source": "2ndStreet",
                                         "brand": brand_name
                                     })

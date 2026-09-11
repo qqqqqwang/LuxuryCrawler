@@ -48,40 +48,48 @@ def notify_2ndstreet_discord(brand_items):
     if not DISCORD_WEBHOOK_2NDSTREET:
         return
 
-    # Discord embeds can have max 25 fields.
-    # To be safe, we'll create one embed per brand if it has many items, 
-    # or chunk them into multiple embeds.
-    
     embeds = []
     
     for brand, items in brand_items.items():
         brand_url = SECOND_STREET_BRANDS.get(brand, "")
         
-        embed = {
-            "title": f"✨ 2nd Street 新品上架: {brand}",
-            "url": brand_url if brand_url else None,
-            "color": 3447003,  # Blue color
-            "fields": []
-        }
-        
-        # Add up to 25 items per brand (Discord limit for fields is 25)
-        for item in items[:25]:
+        for item in items:
+            title = item.get('title', '商品名稱未定')
             price = format_price(item.get('price', '0'))
-            embed["fields"].append({
-                "name": item.get('title', '商品名稱未定')[:256], # Discord name limit
-                "value": f"💰 **TWD {price}**\n[👉 前往商品]({item.get('link', '')})",
-                "inline": True
-            })
+            link = item.get('link', '')
+            image_url = item.get('image', '')
             
-        if len(items) > 25:
-            embed["footer"] = {"text": f"還有 {len(items) - 25} 件商品未顯示..."}
+            embed = {
+                "title": title[:256],
+                "url": link,
+                "color": 3447003,
+                "author": {
+                    "name": f"✨ 2nd Street | {brand}",
+                    "url": brand_url if brand_url else link,
+                },
+                "fields": [
+                    {
+                        "name": "💰 售價 (Price)",
+                        "value": f"**TWD {price}**",
+                        "inline": True
+                    },
+                    {
+                        "name": "🏷️ 品牌 (Brand)",
+                        "value": brand,
+                        "inline": True
+                    }
+                ]
+            }
             
-        embeds.append(embed)
-        
-        # Webhook payload can have max 10 embeds. If we exceed, send and reset.
-        if len(embeds) == 10:
-            send_discord_webhook(DISCORD_WEBHOOK_2NDSTREET, {"embeds": embeds})
-            embeds = []
+            if image_url:
+                embed["thumbnail"] = {"url": image_url}
+                
+            embeds.append(embed)
+            
+            # Webhook payload can have max 10 embeds. If we exceed, send and reset.
+            if len(embeds) == 10:
+                send_discord_webhook(DISCORD_WEBHOOK_2NDSTREET, {"embeds": embeds})
+                embeds = []
             
     if embeds:
         send_discord_webhook(DISCORD_WEBHOOK_2NDSTREET, {"embeds": embeds})
@@ -135,39 +143,51 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
         brand_items[brand].append(item)
 
     embeds = []
-    
     title_prefix = "📉 降價通知" if is_price_drop else "✨ 新品上架"
     
-    # Create an embed for each brand
     for brand, b_items in brand_items.items():
-        embed_title = f"{title_prefix}: {display_name} - {brand}" if brand != "未分類" else f"{title_prefix}: {display_name}"
-        
-        embed = {
-            "title": embed_title,
-            "url": listing_url,
-            "color": color,
-            "fields": []
-        }
-        
-        for item in b_items[:25]:
+        for item in b_items:
+            title = item.get('title', '商品名稱未定')
             price = format_price(item.get('price', '0'))
+            link = item.get('link', '')
+            image_url = item.get('image', '')
             
-            # Format the field name (title) and value (price + link)
-            title = item.get('title', '商品名稱未定')[:256]
-            embed["fields"].append({
-                "name": title,
-                "value": f"💰 **TWD {price}**\n[👉 前往商品]({item.get('link', '')})",
-                "inline": True
-            })
+            author_name = f"{title_prefix} | {display_name}"
+            if brand != "未分類":
+                author_name += f" | {brand}"
+                
+            embed = {
+                "title": title[:256],
+                "url": link,
+                "color": color,
+                "author": {
+                    "name": author_name,
+                    "url": listing_url if listing_url else link,
+                },
+                "fields": [
+                    {
+                        "name": "💰 售價 (Price)",
+                        "value": f"**TWD {price}**",
+                        "inline": True
+                    }
+                ]
+            }
             
-        if len(b_items) > 25:
-            embed["footer"] = {"text": f"還有 {len(b_items) - 25} 件 {brand} 商品未顯示..."}
+            if brand != "未分類":
+                embed["fields"].append({
+                    "name": "🏷️ 品牌 (Brand)",
+                    "value": brand,
+                    "inline": True
+                })
+                
+            if image_url:
+                embed["thumbnail"] = {"url": image_url}
+                
+            embeds.append(embed)
             
-        embeds.append(embed)
-        
-        if len(embeds) == 10:
-            send_discord_webhook(webhook_url, {"embeds": embeds})
-            embeds = []
+            if len(embeds) == 10:
+                send_discord_webhook(webhook_url, {"embeds": embeds})
+                embeds = []
             
     if embeds:
         send_discord_webhook(webhook_url, {"embeds": embeds})

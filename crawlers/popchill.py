@@ -79,12 +79,20 @@ class PopChillCrawler(Crawler):
                                     if b.lower() in title.lower():
                                         detected_brand = b if b != "LV" else "Louis Vuitton"
                                         break
-                                    
+                                
+                                image_url = ""
+                                img_el = card.query_selector('img')
+                                if img_el:
+                                    src = img_el.get_attribute('src')
+                                    if src:
+                                        image_url = src if src.startswith("http") else "https://www.popchill.com" + src
+                                        
                                 items.append({
                                     "id": link,
                                     "title": title,
                                     "price": price,
                                     "link": link,
+                                    "image": image_url,
                                     "source": "PopChill",
                                     "brand": detected_brand
                                 })
@@ -175,12 +183,20 @@ class PopChillPriceDropCrawler(Crawler):
                                 
                                 # Use price in ID to treat price drops as new items
                                 item_id = f"popchill_drop_{link}_{price}"
+                                
+                                image_url = ""
+                                img_el = card.query_selector('img')
+                                if img_el:
+                                    src = img_el.get_attribute('src')
+                                    if src:
+                                        image_url = src if src.startswith("http") else "https://www.popchill.com" + src
                                     
                                 items.append({
                                     "id": item_id,
                                     "title": title,
                                     "price": price,
                                     "link": link,
+                                    "image": image_url,
                                     "source": "PopChill",
                                     "brand": detected_brand
                                 })
