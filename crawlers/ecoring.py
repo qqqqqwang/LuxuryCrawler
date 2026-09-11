@@ -51,11 +51,16 @@ class EcoRingCrawler(Crawler):
                                         # Convert numeric price or clean it up
                                         formatted_price = str(price).split('.')[0] if price else "0"
                                         
+                                        # Image
+                                        img_id = p.get('img_1') or p.get('img_2') or p.get('img_3')
+                                        image_url = f"https://storage.googleapis.com/inventory.eco-ring.com.sg/{img_id}/320" if img_id else ""
+                                        
                                         items.append({
                                             "id": f"ecoring_{barcode}",
                                             "title": title.strip(),
                                             "price": f"NT$ {formatted_price}",
                                             "link": link,
+                                            "image": image_url,
                                             "source": "EcoRing"
                                         })
                         except Exception as e:

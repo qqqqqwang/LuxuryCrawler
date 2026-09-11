@@ -40,12 +40,20 @@ class FugetsuCrawler(Crawler):
                         link = urljoin("https://brandfugetsu.com", href)
                             
                         price = price_el.text.strip()
+                        
+                        img_el = card.select_one('img')
+                        image_url = ""
+                        if img_el:
+                            src = img_el.get('src', '')
+                            if src:
+                                image_url = urljoin("https://brandfugetsu.com", src)
                                 
                         items.append({
                             "id": link,
                             "title": title,
                             "price": price,
                             "link": link,
+                            "image": image_url,
                             "source": "楓月"
                         })
                     except Exception as e:

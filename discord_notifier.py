@@ -111,7 +111,7 @@ def notify_2ndstreet_discord(brand_items):
                 
             # If this is the 10th item and there are more, add a footer note
             if i == 9 and len(items) > 10:
-                embed["footer"] = {"text": f"還有 {len(items) - 10} 件 {brand} 商品未顯示，請點擊連結查看..."}
+                embed["footer"] = {"text": f"還有 {len(items) - 10} 件 {brand} 商品未顯示，請點擊上方標題回原網站查看..."}
                 
             embeds.append(embed)
             
@@ -217,7 +217,7 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
                 embed["thumbnail"] = {"url": image_url}
                 
             if i == 9 and len(b_items) > 10:
-                embed["footer"] = {"text": f"還有 {len(b_items) - 10} 件商品未顯示，請點擊連結查看..."}
+                embed["footer"] = {"text": f"還有 {len(b_items) - 10} 件商品未顯示，請點擊上方標題回原網站查看..."}
                 
             embeds.append(embed)
             

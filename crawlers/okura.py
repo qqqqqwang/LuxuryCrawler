@@ -41,6 +41,18 @@ class OkuraCrawler(Crawler):
                         else:
                             link = href
                             
+                        # Image
+                        img_el = card.select_one('img')
+                        image_url = ""
+                        if img_el:
+                            src = img_el.get('src', '')
+                            if src.startswith('//'):
+                                image_url = "https:" + src
+                            elif src.startswith('http'):
+                                image_url = src
+                            else:
+                                image_url = f"https://taiwan.wb-ookura.com{src}"
+                            
                         # Extract price from all text chunks inside the card
                         texts = [t.strip() for t in card.text.split('\n') if t.strip()]
                         price = "0 TWD"
@@ -54,6 +66,7 @@ class OkuraCrawler(Crawler):
                             "title": title,
                             "price": price,
                             "link": link,
+                            "image": image_url,
                             "source": "OKURA"
                         })
                     except Exception as e:

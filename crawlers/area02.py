@@ -63,12 +63,14 @@ class Area02Crawler(Crawler):
                 slug = urllib.parse.quote(title.replace(' ', '-').replace('/', '-').lower())
                 
                 link = f"https://www.area02.com/{brand_path}/{brand_path}/i-{hash_key}--{slug}"
+                image_url = h.get('url', '')
                 
                 items.append({
                     "id": link,
                     "title": title,
                     "price": price,
                     "link": link,
+                    "image": image_url,
                     "source": "Area02"
                 })
                 
