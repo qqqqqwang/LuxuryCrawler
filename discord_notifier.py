@@ -3,6 +3,7 @@ import json
 from config import (
     DISCORD_WEBHOOK_2NDSTREET,
     DISCORD_WEBHOOK_POPCHILL,
+    DISCORD_WEBHOOK_POPCHILL_DROP,
     DISCORD_WEBHOOK_ECORING,
     DISCORD_WEBHOOK_OTHERS,
     SECOND_STREET_BRANDS
@@ -95,8 +96,12 @@ def notify_platform_discord(crawler_name, items, listing_url, is_price_drop=Fals
     color = 9807270  # Grey default
     display_name = crawler_name
     
-    if crawler_name.lower() == "popchill" or crawler_name.lower() == "popchillpricedrop":
+    if crawler_name.lower() == "popchill":
         webhook_url = DISCORD_WEBHOOK_POPCHILL
+        display_name = "拍拍圈"
+        color = 15277667  # Pink
+    elif crawler_name.lower() == "popchillpricedrop":
+        webhook_url = DISCORD_WEBHOOK_POPCHILL_DROP
         display_name = "拍拍圈"
         color = 15277667  # Pink
     elif crawler_name.lower() == "ecoring":
