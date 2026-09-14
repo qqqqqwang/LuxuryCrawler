@@ -92,9 +92,9 @@ def notify_2ndstreet_discord(brand_items):
     for brand, items in brand_items.items():
         brand_url = SECOND_STREET_BRANDS.get(brand, "")
         if brand_url:
-            desc_lines.append(f"**[{brand}]({brand_url})**: {len(items)} 件")
+            desc_lines.append(f"**[{brand}]({brand_url})** 👉 {len(items)} 件")
         else:
-            desc_lines.append(f"**{brand}**: {len(items)} 件")
+            desc_lines.append(f"**{brand}** 👉 {len(items)} 件")
             
     overview_embed = {
         "title": "📋 2nd Street | 本次新品上架總覽",
