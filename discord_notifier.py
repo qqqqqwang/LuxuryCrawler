@@ -99,7 +99,7 @@ def notify_2ndstreet_discord(brand_items):
     overview_embed = {
         "title": "📋 2nd Street | 本次新品上架總覽",
         "color": RUN_COLOR,
-        "description": "\\n".join(desc_lines)
+        "description": "\n".join(desc_lines)
     }
     
     if desc_lines:
