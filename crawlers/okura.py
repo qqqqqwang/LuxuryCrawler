@@ -20,23 +20,22 @@ class OkuraCrawler(Crawler):
                     continue
                     
                 soup = BeautifulSoup(r.text, 'html.parser')
-                cards = soup.select('.xo-product-card')
+                cards = soup.select('a[href*="/products/"]')
                 
                 print(f"[OKURA] Page {page}: Found {len(cards)} items.")
                 
                 for card in cards:
                     try:
-                        title_el = card.select_one('.xo-product-card__title')
-                        link_el = card.select_one('a')
+                        title_el = card.find(['h2', 'h3', 'div', 'p'], class_=lambda x: x and '__title' in x) or card.find('h2')
                         
-                        if not title_el or not link_el:
+                        if not title_el:
                             continue
                             
                         title = title_el.text.strip()
-                        href = link_el.get('href')
+                        href = card.get('href')
                         
                         # Fix up the link if it's relative
-                        if not href.startswith('http'):
+                        if href and not href.startswith('http'):
                             link = f"https://taiwan.wb-ookura.com{href}"
                         else:
                             link = href
@@ -54,12 +53,16 @@ class OkuraCrawler(Crawler):
                                 image_url = f"https://taiwan.wb-ookura.com{src}"
                             
                         # Extract price from all text chunks inside the card
-                        texts = [t.strip() for t in card.text.split('\n') if t.strip()]
+                        price_el = card.find(['p', 'div', 'span'], class_=lambda x: x and '__price' in x)
                         price = "0 TWD"
-                        for text in texts:
-                            if 'TWD' in text or 'NT$' in text or '$' in text:
-                                price = text
-                                break
+                        if price_el:
+                            price = price_el.text.strip()
+                        else:
+                            texts = [t.strip() for t in card.text.split('\n') if t.strip()]
+                            for text in texts:
+                                if 'TWD' in text or 'NT$' in text or '$' in text:
+                                    price = text
+                                    break
                                 
                         items.append({
                             "id": link,
