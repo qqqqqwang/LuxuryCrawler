@@ -56,19 +56,19 @@ SECOND_STREET_BRANDS = {
     "BURBERRY": "https://store.2ndstreet.com.tw/v2/Search?q=BURBERRY&shopId=41320&order=Newest",
     "BALENCIAGA": "https://store.2ndstreet.com.tw/v2/Search?q=BALENCIAGA&shopId=41320&order=Newest",
     "GUCCI": "https://store.2ndstreet.com.tw/v2/Search?q=GUCCI&shopId=41320&order=Newest",
-    "MIU MIU": 'https://store.2ndstreet.com.tw/v2/Search?q=%22MIU+MIU%22&shopId=41320&order=Newest',
-    "PRADA": 'https://store.2ndstreet.com.tw/v2/Search?q=%22PRADA%22&shopId=41320&order=Newest',
-    "DIOR": 'https://store.2ndstreet.com.tw/v2/Search?q=%22DIOR%22&shopId=41320&order=Newest',
-    "GOYARD": 'https://store.2ndstreet.com.tw/v2/Search?q=%22GOYARD%22&shopId=41320&order=Newest',
+    "MIU MIU": "https://store.2ndstreet.com.tw/v2/Search?q=MIU+MIU&shopId=41320&order=Newest",
+    "PRADA": "https://store.2ndstreet.com.tw/v2/Search?q=PRADA&shopId=41320&order=Newest",
+    "DIOR": "https://store.2ndstreet.com.tw/v2/Search?q=DIOR&shopId=41320&order=Newest",
+    "GOYARD": "https://store.2ndstreet.com.tw/v2/Search?q=GOYARD&shopId=41320&order=Newest",
     "ISSEY MIYAKE": "https://store.2ndstreet.com.tw/v2/Search?q=ISSEY+MIYAKE&shopId=41320&order=Newest",
-    "YSL": "https://store.2ndstreet.com.tw/v2/Search?q=%22SAINT+LAURENT%22&shopId=41320&order=Newest&priceRange=&page=1&limit=20&sort=21",
-    "LOEWE": "https://store.2ndstreet.com.tw/v2/Search?q=%22LOEWE%22&shopId=41320&order=Newest",
-    "FENDI": "https://store.2ndstreet.com.tw/v2/Search?q=%22Fendi%22&shopId=41320&order=Newest",
-    "MONCLER": "https://store.2ndstreet.com.tw/v2/Search?q=%22Moncler%22&shopId=41320&order=Newest",
-    "ROGER VIVIER": "https://store.2ndstreet.com.tw/v2/Search?q=%22roger+vivier%22&shopId=41320&order=Newest",
-    "THE ROW": "https://store.2ndstreet.com.tw/v2/Search?q=%22the+row%22&shopId=41320&order=Newest",
-    "VIVIENNE WESTWOOD": "https://store.2ndstreet.com.tw/v2/Search?q=%22westwood%22&shopId=41320&order=Newest",
-    "ACNE STUDIOS": "https://store.2ndstreet.com.tw/v2/Search?q=%22Acne+Studios%28Acne%29%22&shopId=41320&order=Newest"
+    "YSL": "https://store.2ndstreet.com.tw/v2/Search?q=SAINT+LAURENT&shopId=41320&order=Newest&priceRange=&page=1&limit=20&sort=21",
+    "LOEWE": "https://store.2ndstreet.com.tw/v2/Search?q=LOEWE&shopId=41320&order=Newest",
+    "FENDI": "https://store.2ndstreet.com.tw/v2/Search?q=Fendi&shopId=41320&order=Newest",
+    "MONCLER": "https://store.2ndstreet.com.tw/v2/Search?q=Moncler&shopId=41320&order=Newest",
+    "ROGER VIVIER": "https://store.2ndstreet.com.tw/v2/Search?q=roger+vivier&shopId=41320&order=Newest",
+    "THE ROW": "https://store.2ndstreet.com.tw/v2/Search?q=the+row&shopId=41320&order=Newest",
+    "VIVIENNE WESTWOOD": "https://store.2ndstreet.com.tw/v2/Search?q=vivienne+westwood&shopId=41320&order=Newest",
+    "ACNE STUDIOS": "https://store.2ndstreet.com.tw/v2/Search?q=Acne+Studios%28Acne%29&shopId=41320&order=Newest"
 }
 
 # Hermes URLs
