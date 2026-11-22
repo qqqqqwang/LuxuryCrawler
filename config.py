@@ -68,7 +68,8 @@ SECOND_STREET_BRANDS = {
     "ROGER VIVIER": "https://store.2ndstreet.com.tw/v2/Search?q=roger+vivier&shopId=41320&order=Newest",
     "THE ROW": "https://store.2ndstreet.com.tw/v2/Search?q=the+row&shopId=41320&order=Newest",
     "VIVIENNE WESTWOOD": "https://store.2ndstreet.com.tw/v2/Search?q=vivienne+westwood&shopId=41320&order=Newest",
-    "ACNE STUDIOS": "https://store.2ndstreet.com.tw/v2/Search?q=Acne+Studios%28Acne%29&shopId=41320&order=Newest"
+    "ACNE STUDIOS": "https://store.2ndstreet.com.tw/v2/Search?q=Acne+Studios%28Acne%29&shopId=41320&order=Newest",
+    "BOTTEGA VENETA": "https://store.2ndstreet.com.tw/tagCategory/BOTTEGA%20VENETA?pages=1&sortMode=Newest"
 }
 
 # Hermes URLs
